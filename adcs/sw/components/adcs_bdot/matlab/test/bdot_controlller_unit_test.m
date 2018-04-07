@@ -1,40 +1,35 @@
-clear variables; close all; clc;
-set(0,'defaulttextinterpreter','latex');
-path(pathdef)
-cd ~; cd uw_cubesat_adcs_sourcetree/adcs/sw/components/adcs_sim/matlab/
-addpath(genpath(pwd))
-cd ~; cd uw_cubesat_adcs_sourcetree/adcs/sw/components/adcs_fsw/matlab/
-addpath(genpath(pwd))
-cd ~; cd uw_cubesat_adcs_sourcetree/adcs/sw/components/adcs_bdot/matlab/
-addpath(genpath(pwd))
-
-
-figdir = './test/figs/';
-datadir = './test/data/';
-
+%% BDOT Test Script
+% ----------------------------------------------------------------------- %
+% UW HuskySat-1, ADCS Subsystem
+%   T. Reynolds 8.19.17
+%
 % Test 1:
 %   Base line control gain and cut-off frequency values currently slated
 %   for flight software
 % Test 2:
 %   Test control gain and cut-off frequency to try attempt improvements
-
-% Last saved test: 
-%   T. Reynolds 8.19.17
-
+%
+% Assumes sim_init.m has been run to set paths
+%
 % Toggle to save figures and data. 0 => no save, 1 => save.
 save_all = 0;
 
+set(0,'defaulttextinterpreter','latex');
+figdir  = './test/figs/';
+datadir = './test/data/';
+
+run_test = 1;
+% ----------------------------------------------------------------------- %
 %% Test 1
-
+if( run_test == 1 )
 % Initialization
-fsw_params = init_fsw_params();
-sim_params = init_sim_params(fsw_params);
-
-% Load libraries used in this test
-fsw_params.bdot  = init_bdot_controller(fsw_params);
+fsw_params          = init_fsw_params();
+sim_params          = init_sim_params(fsw_params);
+fsw_params.bdot     = init_bdot_controller(fsw_params);
 
 % ----- Overrides ----- %
 sim_params.environment.avg_b = [1.59212e-5 -6.1454e-6 4.0276e-5]; % T
+sim_params.dynamics.ic.rate_init    = [ 0.12; -0.2; 0.05 ];
 % --------------------- %
 
 % Simulation parameters
@@ -56,6 +51,9 @@ body_rates_radps_time = logsout.getElement('body_rates_radps').Values.Time;
 
 b_meas_eci_T = logsout.getElement('b_meas_eci_T').Values.Data;
 b_meas_eci_time = logsout.getElement('b_meas_eci_T').Values.Time;
+
+tumble          = logsout.getElement('tumble').Values.Data;
+tumble_time     = logsout.getElement('tumble').Values.Time;
 
 figure(1)
 subplot(3,1,1)
@@ -86,17 +84,37 @@ if save_all == 1
 end
 
 figure(3)
+subplot(2,1,1), hold on
 plot(bdot_Tps_time,bdot_Tps(:,1),'r')
-hold on
 plot(bdot_Tps_time,bdot_Tps(:,2),'b')
 plot(bdot_Tps_time,bdot_Tps(:,3),'k')
+plot([0 bdot_Tps_time(end)],[fsw_params.bdot.bdot_thresh.max fsw_params.bdot.bdot_thresh.max],'r--','LineWidth',1)
+plot([0 bdot_Tps_time(end)],[fsw_params.bdot.bdot_thresh.min fsw_params.bdot.bdot_thresh.min],'r--','LineWidth',1)
 ylabel('$\dot{B}$ [T/s]','FontSize',12)
 xlabel('Time [s]','FontSize',12)
+subplot(2,1,2), hold on
+plot(tumble_time,tumble,'LineWidth',1)
 if save_all == 1
     SaveFigurePretty(gcf,strcat(figdir,'bdot_Tps_test1_png'));
     saveas(gcf, strcat(figdir, 'bdot_Tps_test1'),'fig');
 end
 
+w       = 0.0693 * ones(3,1);
+B_avg   = [1.59212e-5 -6.1454e-6 4.0276e-5];
+
+% % Estimate w from bdot
+% t   = bdot_Tps_time;
+% w_est   = zeros(3,length(tout));
+% for i = 1:length(tout)
+%     bdot    = zeros(3,1);
+%     for j = 1:3
+%         bdot(j)        = interp1(t,bdot_Tps(i,j),tout(i));
+%     end
+% %     uu(i) = interp1(ut,u(i,:),t,method);
+%     b           = b_meas_eci_T(i,:);
+%     b_mat       = -skew(bdot);
+%     w_est(i,:)  = reshape(pinv(b_mat)*bdot,3,1);
+% end
 
 % b_field     = repmat(sim_params.environment.avg_b,length(b_meas_eci_time),1);
 % 
@@ -115,13 +133,11 @@ end
 
 
 %% Test 2
-
+elseif( run_test == 2 )
 % Testing new gain and cut-off freq in the filter for better performance.
 
 % Initialization
 clear varialbes; close all; clc
-figdir = '/Users/Taylor/Dropbox/Cubesat/Cubesat_sim/Sandbox/FSW/Control/Bdot/sim_test_v2/fig/';
-datadir = '/Users/Taylor/Dropbox/Cubesat/Cubesat_sim/Sandbox/FSW/Control/Bdot/sim_test_v2/data/';
 
 fsw_params = init_fsw_params();
 sim_params = init_sim_params(fsw_params);
@@ -206,4 +222,4 @@ if save_all == 1
     save(strcat(datadir,'workspace_test2.mat'),'-mat')
 end
 
-%% Tear-down
+end
