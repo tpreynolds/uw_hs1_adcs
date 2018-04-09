@@ -82,7 +82,7 @@ run_time    = num2str(t_end);
 mdl         = 'mag_pd_control_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
-sim(mdl);
+%sim(mdl);
 
 % ----- Analyze Results ----- %
 
