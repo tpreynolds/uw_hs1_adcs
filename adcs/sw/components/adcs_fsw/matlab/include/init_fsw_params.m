@@ -18,7 +18,7 @@ fsw_params  = struct;
 
 % ----- Spacecraft Parameters ----- %
 fsw_params.sample_time_s    = 1/10; % Sample at 10Hz
-fsw_params.bus  = init_bus_params();
+fsw_params.bus              = init_bus_params();
 % --------------------------------- %
 
 % ----- Constants ----- %
@@ -27,7 +27,7 @@ fsw_params.convert.M2KM         = 1e-3;  % convert m to km
 fsw_params.convert.NT2T         = 1e-9;  % convert nano-Tesla to Tesla
 fsw_params.convert.RPM_2_RADPS  = (pi/30); % convert RPM to rad/s
 fsw_params.convert.RADPS_2_RPM  = (30/pi); % convert RPM to rad/s
-fsw_params.constants    = init_fsw_constants();
+fsw_params.constants            = init_fsw_constants();
 % --------------------- %
 
 % ----- Environment ----- %
@@ -46,14 +46,14 @@ fsw_params.actuators    = init_actuators();
 
 % ----- ADCS Mode Management ----- %
 fsw_params.mode_selection   = init_mode_selection(fsw_params);
-fsw_params.target_gen               = init_target_generation(fsw_params);
+fsw_params.target_gen       = init_target_generation(fsw_params);
 % -------------------------------- %
 
 % ----- Controllers ----- %
-fsw_params.control.pd_controller    = init_pd_controller(fsw_params);
-fsw_params.control.mag_pd_controller = init_mag_pd_controller(fsw_params);
-fsw_params.control.p_dump           = init_momentum_dump(fsw_params);
-fsw_params.control.cmd_processing   = init_cmd_processing(fsw_params);
+fsw_params.control.pd_controller        = init_pd_controller(fsw_params);
+fsw_params.control.mag_pd_controller    = init_mag_pd_controller(fsw_params);
+fsw_params.control.p_dump               = init_momentum_dump(fsw_params);
+fsw_params.control.cmd_processing       = init_cmd_processing(fsw_params);
 % ----------------------- %
 
 % ----- Ground Station Prediction----- %

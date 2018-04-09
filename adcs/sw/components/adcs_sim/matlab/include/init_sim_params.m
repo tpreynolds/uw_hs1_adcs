@@ -14,11 +14,11 @@
 
 % ----- Spacecraft Parameters ----- %
 sim_params.bus  = fsw_params.bus;
-sim_params.MET  = init_MET(fsw_params);
+[sim_params.MET, fsw_params]  = init_MET(fsw_params);
 % -----
 
 % ----- Physical Bus Signal Emulators ----- %
-sim_params.CAN  = init_CAN(sim_params);
+[sim_params.CAN, fsw_params]  = init_CAN(sim_params, fsw_params);
 % -----
 
 % ----- Dynamics -----%
