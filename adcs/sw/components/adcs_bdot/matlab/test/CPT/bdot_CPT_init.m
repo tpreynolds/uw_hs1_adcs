@@ -10,32 +10,59 @@
 %
 % Toggle to save figures and data. 0 => no save, 1 => save.
 % ----------------------------------------------------------------------- %
-save_all = 0;
+% Start fresh
+clear variables; close all; clc
+addpath(genpath('../../../matlab/'))
+addpath(genpath('../../../../adcs_fsw/matlab/'))
+addpath(genpath('../../../../adcs_sim/matlab/'))
 
 set(0,'defaulttextinterpreter','latex');
-figdir  = '../figs/';
-datadir = '../data/';
+figdir      = '../figs/';
+datadir     = '../data/';
+save_all    = 0;
 
 %% Execute Test
 k           = 1;
-numTest     = 100;
-W       = zeros(numTest,1); % final angular velocity norm
+numTest     = 1;
+W       = zeros(numTest,2); % initial/final angular velocity norm
 T       = zeros(numTest,1); % time to detumble
 
-fsw_params          = init_fsw_params();
-sim_params          = init_sim_params(fsw_params);
-fsw_params.bdot     = init_bdot_controller(fsw_params);
-
 % ----- Overrides ----- %
-sim_params.dynamics.ic.rate_init    = -0.2 + (0.4)*rand(3,1);
 run_time    = 9500; % [s] -- roughly two orbits
 % --------------------- %
 
-% Simulation parameters
-mdl     = 'adcs_sim_main';
-load_system(mdl); 
-set_param(mdl, 'StopTime', num2str(run_time)); 
-sim(mdl);
+for k = 1:numTest
+    % Load bus stub definitions
+    load('bus_definitions.mat')
+    load('bus_definitions_fsw.mat')
+    
+    % Load parameters for both flight software and simulation
+    fsw_params              = init_fsw_params();
+    [sim_params,fsw_params] = init_sim_params(fsw_params);
+    fsw_params.bdot         = init_bdot_controller(fsw_params);
+    
+    % Set initial tumble rate
+    sim_params.dynamics.ic.rate_init    = -0.2 + (0.4)*rand(3,1);
+    
+    % Sim model
+    mdl     = 'adcs_sim_main';
+    load_system(mdl);
+    set_param(mdl, 'StopTime', num2str(run_time));
+    sim(mdl);
+    
+    % Save results of the test to an array
+    W(k,1)  = norm(sim_params.dynamics.ic.rate_init);
+    W(k,2)  = norm(omega_radps.Data(end,:));
+    
+    [val,tk]  = min(tumble.Data(2:end)); % ignore first time step
+    if( val ~= 0 )
+        % did not succeed in detumbling
+        T(k) = -1; 
+    else
+        % time to detumble. +1 since we ignored first time step for tk
+        T(k) = tumble.Time(tk+1); 
+    end
+    
+end
 
-% Save results of the test to an array
-W(k)    = norm(omega_radps(end,:));
+% Save test data to csv file

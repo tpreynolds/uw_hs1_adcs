@@ -8,7 +8,7 @@
 run('sim_init.m')
 
 w_prec  = 7.29211514670698e-05;
-t_end   = 10000;
+t_end   = 10800;
 
 % Simulation parameters
 run_time    = num2str(t_end);
@@ -63,5 +63,9 @@ plot(B_eci_T.Time,B_eci_T.Data(:,3),'LineWidth',1)
 plot(B_eci_T.Time,BB(:,3),'LineWidth',1)
 xlabel('Time [s]')
 
-%save('workspace-disturbances-test1.mat')
+if( err < 1e-7 )
+    save('mag_field_approx.mat','x')
+end
+
+
 

@@ -1,7 +1,7 @@
 function fsw_params = init_fsw_params()
 % ----------------------------------------------------------------------- %
 % UW HuskySat-1, ADCS Team
-
+%
 % Define all parameters to be used by FSW here. This is the first file to
 % be called by 'SimInit.m' to initialize simulation data for the full 'Main
 % Simulation.slx'.
@@ -11,7 +11,7 @@ function fsw_params = init_fsw_params()
 %   library. The main blocks (sensors, actuators etc.) have been set up so
 %   that a call to "init_sensors" will initialize all sub-libraries used.
 %       ex. fsw_params.sensors = init_sensors();
-
+%
 % Last Edited: T.Reynolds 2.17.18
 % ----------------------------------------------------------------------- %
 fsw_params  = struct;
