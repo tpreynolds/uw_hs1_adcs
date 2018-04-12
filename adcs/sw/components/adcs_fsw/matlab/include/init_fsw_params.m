@@ -31,7 +31,8 @@ fsw_params.constants            = init_fsw_constants();
 % --------------------- %
 
 % ----- Environment ----- %
-fsw_params.environment      = init_environment(fsw_params);
+[environment,fsw_params]    = init_environment(fsw_params);
+fsw_params.environment      = environment;
 fsw_params.env_estimation   = init_env_estimation(fsw_params);
 % ----------------------- %
 

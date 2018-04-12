@@ -28,7 +28,7 @@ W       = zeros(numTest,2); % initial/final angular velocity norm
 T       = zeros(numTest,1); % time to detumble
 
 % ----- Overrides ----- %
-run_time    = 9500; % [s] -- roughly two orbits
+run_time    = 10800; % [s] -- roughly two orbits
 % --------------------- %
 
 for k = 1:numTest

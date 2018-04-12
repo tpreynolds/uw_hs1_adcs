@@ -31,13 +31,13 @@ fsw_params.bdot     = init_bdot_controller(fsw_params);
 sim_params.environment.avg_b = [1.59212e-5 -6.1454e-6 4.0276e-5]; % T
 sim_params.dynamics.ic.rate_init    = [ 0.1; 0.1; 0.1 ];
 % fsw_params.bdot.gain_matrix    =  1.5*fsw_params.bdot.gain_matrix;
-fsw_params.bdot.cutoff_freq = 1*pi*0.1; % [rad/s]
-fsw_params.bdot.continuous_lpf = tf([fsw_params.bdot.cutoff_freq],[1 fsw_params.bdot.cutoff_freq]);
-fsw_params.bdot.discrete_lpf   = c2d(fsw_params.bdot.continuous_lpf,fsw_params.bdot.sample_time_s);
-[fsw_params.bdot.filter_num,fsw_params.bdot.filter_den] = tfdata(fsw_params.bdot.discrete_lpf,'v');
-% Extract second component only for use in filter
-fsw_params.bdot.filter_num     = fsw_params.bdot.filter_num(2);
-fsw_params.bdot.filter_den     = fsw_params.bdot.filter_den(2);
+% fsw_params.bdot.cutoff_freq = 1*pi*0.1; % [rad/s]
+% fsw_params.bdot.continuous_lpf = tf([fsw_params.bdot.cutoff_freq],[1 fsw_params.bdot.cutoff_freq]);
+% fsw_params.bdot.discrete_lpf   = c2d(fsw_params.bdot.continuous_lpf,fsw_params.bdot.sample_time_s);
+% [fsw_params.bdot.filter_num,fsw_params.bdot.filter_den] = tfdata(fsw_params.bdot.discrete_lpf,'v');
+% % Extract second component only for use in filter
+% fsw_params.bdot.filter_num     = fsw_params.bdot.filter_num(2);
+% fsw_params.bdot.filter_den     = fsw_params.bdot.filter_den(2);
 % --------------------- %
 
 % Simulation parameters

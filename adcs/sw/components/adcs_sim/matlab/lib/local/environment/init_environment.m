@@ -1,4 +1,4 @@
-function environment = init_environment(fsw_params)
+function [environment,fsw_params] = init_environment(fsw_params)
 % ----------------------------------------------------------------------- %
 % UW HuskySat-1, ADCS Team
 %
@@ -15,7 +15,12 @@ environment.magnetic    = init_magnetic_field();
 environment.sgp4        = init_sgp4();
 environment.sun_vector  = init_sun_vector();
 
-
+% Update constant struct
+fsw_params.constants.mag.orbit_freq = ...
+                                environment.sgp4.orbit_tle(9) * ...
+                                fsw_params.constants.convert.rev2rad * ...
+                                fsw_params.constants.time.sec2day;
+ 
 
 
 end

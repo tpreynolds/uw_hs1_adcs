@@ -31,6 +31,8 @@ constants.convert.radps_2_RPM   = (30/pi);
 constants.convert.deg2rad       = pi/180;
 constants.convert.rad2deg       = 180/pi;
 constants.convert.asec2rad      = 1/3600 * constants.convert.deg2rad;
+constants.convert.rev2rad       = 2*pi;
+constants.convert.rad2rev       = 1/(2*pi);
 
 % Mag field approx
 x   = load('mag_field_approx.mat');
