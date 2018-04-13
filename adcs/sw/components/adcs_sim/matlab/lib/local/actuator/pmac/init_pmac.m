@@ -3,7 +3,7 @@
 %   Last Update: B. Barzgaran - 4.13.18
 
 %%
-function pmac     = init_pmac
+function pmac     = init_pmac()
 
 % Set params for each pmac library
 
