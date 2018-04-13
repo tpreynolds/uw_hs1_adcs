@@ -12,8 +12,8 @@ hyst.Br = 0.35;
 hyst.V_hyst = 1;
 
 % hysteresis switch
-pmac.hyst.on     = pmac.hyst.Hc*(pmac.hyst.Bs/pmac.hyst.Br-1);
-pmac.hyst.off    = pmac.hyst.Hc*(1-pmac.hyst.Bs/pmac.hyst.Br);
+hyst.on     = hyst.Hc*(hyst.Bs/hyst.Br-1);
+hyst.off    = hyst.Hc*(1-hyst.Bs/hyst.Br);
 
 % rod alingment, unit vector
 hyst.rod1.align = [1;0;0];
