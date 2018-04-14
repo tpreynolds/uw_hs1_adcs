@@ -36,8 +36,8 @@ fsw_params.env_estimation   = init_env_estimation(fsw_params);
 % ----------------------- %
 
 % ----- Sensors ----- %
-% fsw_params.sensors              = init_sensors();
-% fsw_params.sensor_processing    = init_sensor_processing(fsw_params);
+fsw_params.sensors              = init_sensors();
+fsw_params.sensor_processing    = init_sensor_processing(fsw_params);
 % ------------------- %
 
 % ----- Actuators ----- %
@@ -50,10 +50,10 @@ fsw_params.target_gen               = init_target_generation(fsw_params);
 % -------------------------------- %
 
 % ----- Controllers ----- %
-% fsw_params.control.pd_controller    = init_pd_controller(fsw_params);
-% fsw_params.control.mag_pd_controller = init_mag_pd_controller(fsw_params);
-% fsw_params.control.p_dump           = init_momentum_dump(fsw_params);
-% fsw_params.control.cmd_processing   = init_cmd_processing(fsw_params);
+fsw_params.control.pd_controller    = init_pd_controller(fsw_params);
+fsw_params.control.mag_pd_controller = init_mag_pd_controller(fsw_params);
+fsw_params.control.p_dump           = init_momentum_dump(fsw_params);
+fsw_params.control.cmd_processing   = init_cmd_processing(fsw_params);
 % ----------------------- %
 
 % ----- Ground Station Prediction----- %

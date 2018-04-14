@@ -14,11 +14,11 @@
 
 % ----- Spacecraft Parameters ----- %
 sim_params.bus  = fsw_params.bus;
-% sim_params.MET  = init_MET(fsw_params);
+sim_params.MET  = init_MET(fsw_params);
 % -----
 
 % ----- Physical Bus Signal Emulators ----- %
-% sim_params.CAN  = init_CAN(sim_params);
+sim_params.CAN  = init_CAN(sim_params);
 % -----
 
 % ----- Dynamics -----%
@@ -27,12 +27,12 @@ sim_params.dynamics = init_dynamics(fsw_params);
 
 % ----- Sensors ----- %
 % Magnetometer
-% sim_params.sensors  = init_sensors();
+sim_params.sensors  = init_sensors();
 % -----
 
 % ----- Actuators ----- %
 sim_params.actuators    = init_actuators();
-% fsw_params.actuators.ppt    = init_ppt(fsw_params);
+fsw_params.actuators.ppt    = init_ppt(fsw_params);
 % -----
 
 % ----- Environment ----- %
@@ -44,7 +44,7 @@ fsw_params.bus.orbit_tle = sim_params.environment.sgp4.orbit_tle;
 % -----
 
 % ----- Estimation ----- %
-% fsw_params.estimation   = init_extended_kalman_filter(sim_params);
+fsw_params.estimation   = init_extended_kalman_filter(sim_params);
 % -----
 
 
