@@ -23,15 +23,13 @@ CAN.ic.all              = [ CAN.ic.override;
                             CAN.ic.LowPowerMode;
                             CAN.ic.pointing;
                             CAN.ic.COM2_on;
-                            CAN.ic.PPT_on;
-                            CAN.ic.MET ];
+                            CAN.ic.PPT_on];
                         
 fsw_params.bus.CAN_ic   = [ CAN.ic.override;
                             CAN.ic.LowPowerMode;
                             CAN.ic.pointing;
                             CAN.ic.COM2_on;
-                            CAN.ic.PPT_on;
-                            CAN.ic.MET ];
+                            CAN.ic.PPT_on ];
 
 % sample the CAN bus at 5 Hz
 CAN.sample_time_s   = 1/5;  
