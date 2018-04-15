@@ -47,7 +47,7 @@ quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
 omega_cmd   = zeros(3,1);
 
 % Set sim time
-t_end   = 360;
+t_end   = 20;
 
 % turn off mag noise
 sim_params.sensors.magnetometer.noise = 0;
@@ -82,7 +82,7 @@ run_time    = num2str(t_end);
 mdl         = 'mag_pd_control_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
-sim(mdl);
+%sim(mdl);
 
 % ----- Analyze Results ----- %
 
