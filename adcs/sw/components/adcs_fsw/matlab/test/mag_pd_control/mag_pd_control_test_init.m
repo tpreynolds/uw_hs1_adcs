@@ -47,7 +47,7 @@ quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
 omega_cmd   = zeros(3,1);
 
 % Set sim time
-t_end   = 360;
+t_end   = 20;
 
 % turn off mag noise
 sim_params.sensors.magnetometer.noise = 0;
