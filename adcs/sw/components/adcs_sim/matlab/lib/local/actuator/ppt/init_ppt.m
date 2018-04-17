@@ -10,8 +10,7 @@ function [ ppt ] = init_ppt( fsw_params )
 ppt.t_charge    = 1.2; % time to charge in [ s ]
 ppt.t_fire      = 0.002; % time it takes to "fire" [ s ]
 
-ppt.sync_pulse     = fsw_params.bus.sync_pulse;
-
+ppt.sync_pulse      = fsw_params.bus.sync_pulse;
 ppt.t_charge_pct    = ppt.t_charge/ppt.sync_pulse;
 
 

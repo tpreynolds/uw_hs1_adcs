@@ -28,6 +28,7 @@ constants.convert.M2KM  = 1e-3;
 constants.convert.NT2T  = 1e-9;
 constants.convert.RPM_2_radps   = (pi/30);
 constants.convert.radps_2_RPM   = (30/pi);
+constants.convert.revpday_2_radpmin     = 2*pi/1440;
 constants.convert.deg2rad       = pi/180;
 constants.convert.rad2deg       = 180/pi;
 constants.convert.asec2rad      = 1/3600 * constants.convert.deg2rad;

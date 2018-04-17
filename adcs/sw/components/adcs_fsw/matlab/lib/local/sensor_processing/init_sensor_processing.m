@@ -20,7 +20,7 @@ sensor_processing.magnetometer.invalid_input    = zeros(3,1);
 
 % ----- Gyro ----- %
 sensor_processing.gyro.sensor2body  = eye(3);
-sensor_processing.gyro.sample_time_s = (1/50); % Hz
+sensor_processing.gyro.sample_time_s = (1/40); % Hz
 sensor_processing.gyro.cutoff_freq  = 2*pi*1; % [rad/s]
 sensor_processing.gyro.c_lpf        = ...
     tf([sensor_processing.gyro.cutoff_freq],...
@@ -41,20 +41,15 @@ sensor_processing.sunsensor.sample_time_s   = (1/10); % Hz
 % ---------------------- %
 
 % ----- GPS Sensor ----- %
-sensor_processing.gps   = init_gps_processing(fsw_params);
-% ---------------------- %
-
-
-% ----- Photodiodes ----- %
-sensor_processing.photodiodes.sample_time_s  = (1/2); % Hz
+%sensor_processing.gps   = init_gps_processing(fsw_params);
 % ---------------------- %
 
 % ----- Rate Transition ----- %
-sensor_processing.ic.out    = [ 0; 0; 0;        % faceinsun_body_unit
-                                0; 0; 0; 0;     % sun_body_sunsensor + valid
-                                0; 0; 0; 0;     % mag_body_T + valid
-                                sensor_processing.gps.ic.all; % orbit_tle + GPS_time
-                                0; 0; 0; 0];    % omega_radps + valid
+% sensor_processing.ic.out    = [ 0; 0; 0;        % faceinsun_body_unit
+%                                 0; 0; 0; 0;     % sun_body_sunsensor + valid
+%                                 0; 0; 0; 0;     % mag_body_T + valid
+%                                 sensor_processing.gps.ic.all; % orbit_tle + GPS_time
+%                                 0; 0; 0; 0];    % omega_radps + valid
 % --------------------------- %                            
 
 end
