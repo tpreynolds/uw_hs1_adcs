@@ -5,7 +5,7 @@
 % choose the control gains. Uses either a random initial condition or
 % identity quaternion, and commands a given slewing maneuver.
 
-% Test 2: No test 2 yet.
+% Test 2: Recreating results from Silani and Lovera 2005.
 
 % UW HuskySat-1, ADCS Subsystem
 %  Last Update: T. Reynolds 3.29.18
@@ -14,7 +14,7 @@
 clear variables; close all; clc;
 set(0,'defaulttextinterpreter','latex');
 
-run_test    = 1;
+run_test    = 2;
 
 %% Test 1
 
@@ -40,22 +40,23 @@ run('sim_init.m')
 % fsw_params.control.pd_controller.d_gain  = -2*wn*z.*J;
 
 % Set commanded state
-eul_angle   = deg2rad(30);
-eul_axis    = [1; 0; 0];
-eul_axis    = eul_axis./norm(eul_axis);
-quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
+% eul_angle   = deg2rad(30);
+% eul_axis    = [1; 0; 0];
+% eul_axis    = eul_axis./norm(eul_axis);
+% quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
+quat_cmd    = [1/2;1/2;1/2;1/2];
 omega_cmd   = zeros(3,1);
 
 % Set sim time
-t_end   = 20;
+t_end   = 360;
 
 % turn off mag noise
 sim_params.sensors.magnetometer.noise = 0;
 
 % choose dipole
-fsw_params.actuators.magnetorquer.max_dipole_x  = 0.5;
-fsw_params.actuators.magnetorquer.max_dipole_y  = 0.5;
-fsw_params.actuators.magnetorquer.max_dipole_z  = 0.5;
+fsw_params.actuators.magnetorquer.max_dipole_x  = 5; %0.5;
+fsw_params.actuators.magnetorquer.max_dipole_y  = 5; %0.5;
+fsw_params.actuators.magnetorquer.max_dipole_z  = 5; %0.5;
 
 % Digital value range
 digital_value    = 127;
@@ -148,6 +149,43 @@ run('sim_init.m')
 
 % Overrides
 t_end   = 360;
+
+% turn off mag noise
+sim_params.sensors.magnetometer.noise = 0;
+
+%dipole
+fsw_params.actuators.magnetorquer.max_dipole_x  = 30;
+fsw_params.actuators.magnetorquer.max_dipole_y  = 30;
+fsw_params.actuators.magnetorquer.max_dipole_z  = 30;
+
+%SC params
+sim_params.bus.inertia = [36 1.5 0;1.5 17 0;0 0 26];
+
+%initials
+sim_params.dynamics.ic.rate_init = [0.0015;0.0015; sqrt((6.674*10^(-11))/(450*10^3))-0.0001];
+
+%commands 
+quat_cmd    = [1;0;0;0];
+omega_cmd   = zeros(3,1);
+
+% Digital value range
+digital_value    = 127;
+
+% Gains
+fsw_params.control.cmd_processing.dv_2_m_X   = ...
+                        fsw_params.actuators.magnetorquer.max_dipole_x /...
+                            digital_value;
+fsw_params.control.cmd_processing.m_2_dv_X   = 1/fsw_params.control.cmd_processing.dv_2_m_X;
+
+fsw_params.control.cmd_processing.dv_2_m_Y   = ...
+                        fsw_params.actuators.magnetorquer.max_dipole_y /...
+                            digital_value;
+fsw_params.control.cmd_processing.m_2_dv_Y   = 1/fsw_params.control.cmd_processing.dv_2_m_Y;
+
+fsw_params.control.cmd_processing.dv_2_m_Z   = ...
+                        fsw_params.actuators.magnetorquer.max_dipole_z /...
+                            digital_value;
+fsw_params.control.cmd_processing.m_2_dv_Z   = 1/fsw_params.control.cmd_processing.dv_2_m_Z;
 % -----
 
 % Simulation parameters
