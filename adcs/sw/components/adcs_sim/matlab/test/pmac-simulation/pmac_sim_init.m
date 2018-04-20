@@ -33,7 +33,7 @@ m_min = 10*Trms/(Bmin*sin(beta_max));
 align_long = [0;0;1];
 align_wide = [1;0;0];
 
-m = linspace(m_min,2*m_min,10);
+m = linspace(m_min,2*m_min,5);
 % align = [linspace(align_long(1),align_wide(1),10);linspace(align_long(2),align_wide(2),10);linspace(align_long(3),align_wide(3),10)];
 % % alignment vector has to be unit vector:
 % for i = 1:length(align(1,:))
@@ -45,18 +45,21 @@ sim_params.actuators.pmac.magnet.align = [0;0;1];
 h = 35/1000; w = 55/1000; l = 70/1000;
 V_max = 1/3*(h*w*l);
 V_min = 1/10*V_max;
-V = linspace(V_min,V_max,10);
+V = linspace(V_min,V_max,5);
 
 sim_params.actuators.pmac.hyst.rod1.align = [1;0;0];
 sim_params.actuators.pmac.hyst.rod2.align = [0;1;0];
 
 % Simulation iterations
 I = length(m);
-J = length(align(1,:));
+% J = length(align(1,:));
 K = length(V);
 
 % Simulations
-t_end   = 5400;
+% t_end   = 7200; %2 hrs
+% t_end = 172800; %2 days
+t_end = 10000;
+
 run_time    = num2str(t_end);
 model = 'pmac_sim';
 load_system(model)
@@ -73,15 +76,40 @@ for ii = 1:I
         for kk = 1:K
             sim_params.actuators.pmac.hyst.V_hyst = V(kk);
             % Run sim
-%             simOut = sim(model, 'StopTime', run_time);
-            sim(model, 'StopTime', run_time);
+            tic
+            simOut = sim(model, 'StopTime', run_time);
+            toc
             % Data processing
+            B_earth = simOut.logsout.getElement('B_earth_bfr');
+            simTime = B_earth.Values.Time;
+            for g = 1:length(simTime)
+                B_eunit(g,:) = B_earth.Values.Data(g,:)/norm(B_earth.Values.Data(g,:));
+                angle(g) = abs(rad2deg(acos(dot(B_eunit(g,:),sim_params.actuators.pmac.magnet.align))));
+                if angle(g)<rad2deg(beta_max)
+                    pointing(g) = 1;
+                else
+                    pointing(g) = 0;
+                    last_t = g;
+                end
+            end
+            convergence_time(ii,kk) = simTime(last_t);
+            % rms?
+            n = length(simTime)-last_t;
+            if n>0
+                avg_pointing(ii,kk) = sqrt(1/n*dot(angle(last_t+1:end),angle(last_t+1:end)));
+            else
+                avg_pointing(ii,kk) = NaN;
+            end
+            iter = kk+(ii-1)*5;
+            disp([num2str(iter),'/25'])
        end
 %     end
 end
 
+save simResults.mat B_earth convergence_time avg_pointing sim_params V m
 
 % Evaluation
+plot(convergence_time)
 
 
 
