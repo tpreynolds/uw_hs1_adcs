@@ -1,4 +1,4 @@
-function [ MET ] = init_MET( fsw_params )
+function [ MET,fsw_params ] = init_MET( fsw_params )
 % ----------------------------------------------------------------------- %
 % UW HuskySat-1, ADCS Team
 % 

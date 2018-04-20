@@ -15,6 +15,7 @@ sensor_processing.magnetometer.bias             = [0 0 0]';
 sensor_processing.magnetometer.process_matrix   = eye(3);
 sensor_processing.magnetometer.sensor2body      = eye(3);
 sensor_processing.magnetometer.sample_time_s    = (1/20); % Hz
+sensor_processing.magnetometer.invalid_input    = zeros(3,1);
 % ------------------------ %
 
 % ----- Gyro ----- %
