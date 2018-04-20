@@ -17,11 +17,12 @@ mag_pd_controller.ic.torque             = zeros(3,1);
 mag_pd_controller.sample_time_s     = 1/10; % sample at 10 Hz
 
 % Conversions
-mag_pd_controller.rps_2_rpm     = fsw_params.constants.convert.radps_2_RPM;
+% mag_pd_controller.rps_2_rpm     = fsw_params.constants.convert.radps_2_RPM;
 
-J  = fsw_params.bus.inertia;
+
 
 % Choose damping ratio and natural frequency
+J   = fsw_params.bus.inertia; % s/c inertia matrix
 z   = 1;            % Critically damped
 wn  = 0.02*2*pi;    % Small natural frequency
 

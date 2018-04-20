@@ -1,12 +1,12 @@
-function bdot = init_bdot_controller( fsw_params )
+%% BDOT Initialization File for FSW
 % ----------------------------------------------------------------------- %
-% Loads the parameters of the b-dot controller using predefined fsw_params.
-%   Any block added should be initialized and defined in here.
-%
 % UW HuskySat-1, ADCS Subsystem
-% T.Reynolds 4.7.18
 %
+% Loads the parameters of the b-dot controller using predefined fsw_params.
+%
+% T.Reynolds 4.7.18
 % ----------------------------------------------------------------------- %
+function bdot = init_bdot_controller( fsw_params )
 
 % Initial conditions
 bdot.ic.RT_mt_on        = 0;
@@ -17,8 +17,6 @@ bdot.ic.RT_dig_val      = [0 0 0]';
 bdot.ic.derivative      = 0;
 bdot.ic.unit_delay      = [0 0 0]';
 bdot.ic.invalid_input   = [0 0 0]';
-
-% Library parameters
 
 % Make sure gains are negative
 bdot.gain_matrix = diag([...
