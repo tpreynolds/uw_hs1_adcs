@@ -80,19 +80,3 @@ end
 % Save CPT specific data to csv file
 dat = [ T W ];
 csvwrite(CPT_fid,dat);
-=======
-end
-
-% Save full test data for one run to csv file
-if( T(numTest) ~= -1 )
-    M   = [tout omega_radps.Data MT_dv.Data];
-    N   = [mag_mes.Time mag_mes.Data(:,1:3) ];
-    dlmwrite(DATA_fid,M,'delimiter',',');
-    dlmwrite(DATA_fid,N,'delimiter',',','-append');
-end
-
-% Save CPT specific data to csv file
-dat = [ T W ];
-csvwrite(CPT_fid,dat);
-
->>>>>>> tay-init_files
