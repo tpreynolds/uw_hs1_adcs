@@ -8,7 +8,7 @@ function [ constants ] = init_fsw_constants()
 % ----------------------------------------------------------------------- %
 
 % Time
-constants.time.dut1     = 0.0;
+constants.time.dut1     = 0.06420;
 constants.time.dAT      = 37.0;
 constants.time.gps2tai  = 19.0;
 constants.time.gps2tt   = 32.184 + constants.time.gps2tai;
