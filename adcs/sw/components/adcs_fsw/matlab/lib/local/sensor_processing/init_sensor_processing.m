@@ -20,7 +20,7 @@ sensor_processing.magnetometer.invalid_input    = zeros(3,1);
 
 % ----- Gyro ----- %
 sensor_processing.gyro.sensor2body  = eye(3);
-sensor_processing.gyro.sample_time_s = (1/50); % Hz
+sensor_processing.gyro.sample_time_s = (1/40); % Hz
 sensor_processing.gyro.cutoff_freq  = 2*pi*1; % [rad/s]
 sensor_processing.gyro.c_lpf        = ...
     tf([sensor_processing.gyro.cutoff_freq],...
