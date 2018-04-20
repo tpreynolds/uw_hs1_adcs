@@ -14,7 +14,7 @@
 clear variables; close all; clc;
 set(0,'defaulttextinterpreter','latex');
 
-run_test    = 2;
+run_test    = 1;
 
 %% Test 1
 
@@ -40,11 +40,12 @@ run('sim_init.m')
 % fsw_params.control.pd_controller.d_gain  = -2*wn*z.*J;
 
 % Set commanded state
-% eul_angle   = deg2rad(30);
-% eul_axis    = [1; 0; 0];
-% eul_axis    = eul_axis./norm(eul_axis);
-% quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
-quat_cmd    = [1/2;1/2;1/2;1/2];
+eul_angle   = deg2rad(30);
+eul_axis    = [1; 0; 0];
+eul_axis    = eul_axis./norm(eul_axis);
+quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
+% quat_cmd    = [1/2;1/2;1/2;1/2];
+% quat_cmd    = [1;0;0;0];
 omega_cmd   = zeros(3,1);
 
 % Set sim time
@@ -162,7 +163,8 @@ fsw_params.actuators.magnetorquer.max_dipole_z  = 30;
 sim_params.bus.inertia = [36 1.5 0;1.5 17 0;0 0 26];
 
 %initials
-sim_params.dynamics.ic.rate_init = [0.0015;0.0015; sqrt((6.674*10^(-11))/(450*10^3))-0.0001];
+Om0 = fsw_params.constants.mag.orbit_freq;
+sim_params.dynamics.ic.rate_init = [0.0015;0.0015; Om0-0.0001];
 
 %commands 
 quat_cmd    = [1;0;0;0];
