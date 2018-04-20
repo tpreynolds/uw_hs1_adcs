@@ -7,13 +7,13 @@ function hyst = init_hysteresis_rods()
 
 % hysteresis rods properties
 %material parameters
-hyst.Hc = 1.59;
-hyst.Bs = 0.73;
-hyst.Br = 0.35;
+% hyst.Hc = 1.59;
+% hyst.Bs = 0.73;
+% hyst.Br = 0.35;
 %Aparent parameters
-% hyst.Hc = 12;
-% hyst.Bs = 0.027;
-% hyst.Br = 0.004;
+hyst.Hc = 12;
+hyst.Bs = 0.027;
+hyst.Br = 0.004;
 hyst.V_hyst = 1;
 
 % % hysteresis switch

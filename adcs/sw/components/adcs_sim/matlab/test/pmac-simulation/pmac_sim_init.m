@@ -23,6 +23,9 @@ fsw_params              = init_fsw_params();
 
 % ------ Overrides ------ %
 
+% Tumbling IC
+sim_params.dynamics.ic.rate_init = -0.2+0.4*rand(3,1);
+
 % % Magnet dipole & alignment
 % Ta = 8e-8; Tg = 6e-8; Tr = 1e-8; % Environmental torques, aero, gravity, radiometric
 Trms = 1e-7; % from gerhardt, calculate rms for our satellite for more accuracy
@@ -57,8 +60,8 @@ K = length(V);
 
 % Simulations
 % t_end   = 7200; %2 hrs
-% t_end = 172800; %2 days
-t_end = 10000;
+t_end = 172800; %2 days
+% t_end = 10000;
 
 run_time    = num2str(t_end);
 model = 'pmac_sim';
@@ -66,8 +69,8 @@ load_system(model)
 for ii = 1:I
     sim_params.actuators.pmac.magnet.m = m(ii);
 %     for jj = 1:J
-%         sim_params.actuators.pmac.magnet.align = align(:,jj);
-%         sim_params.actuators.pmac.magnet.dipole = sim_params.actuators.pmac.magnet.m*sim_params.actuators.pmac.magnet.align;
+%         sim_params.actuators.pmac.magnet.align = align;
+        sim_params.actuators.pmac.magnet.dipole = sim_params.actuators.pmac.magnet.m*sim_params.actuators.pmac.magnet.align;
 %         
 %         A = [align(:,jj)';zeros(2,3)];
 %         Z = null(A);
