@@ -37,8 +37,7 @@ sim(mdl);
 
 % ----- Analyze Results ----- %
 
-gps_time_fsw    = logsout.getElement('gps_time_fsw').Values.Data;
-gps_time_sensor    = logsout.getElement('gps_time_sensor').Values.Data;
+
 
 % ----- End Analysis ----- %
 
