@@ -1,13 +1,13 @@
 % ----------------------------------------------------------------------- %
 % UW HuskySat-1, ADCS Team
-
+%
 % Define all parameters to be used by SIM here. This is the second file to
 % be called by 'SimInit.m' to initialize simulation data for the full 'Main
 % Simulation.slx'. 
 %   Takes in already defined fsw_params so that sim values can be defined
 %   using the fsw values
-
-% Last Edited: T.Reynolds 4.18.18
+%
+% T.Reynolds 4.18.18
 % ----------------------------------------------------------------------- %
 function [sim_params,fsw_params] = init_sim_params(fsw_params)
 

@@ -14,7 +14,7 @@
 % ----------------------------------------------------------------------- %
 
 % Toggle the test to run here
-run_test    = 1;
+run_test    = 2;
 
 
 %% Test 1
@@ -74,11 +74,11 @@ if run_test == 1
     pos_diff_init   = norm(pos_eci_km(1,:) - pos_true_km(1,:));
     vel_diff_init   = norm(vel_eci_kmps(1,:) - vel_true_kmps(1,:));
     
-    pos_diff_end    = norm(pos_eci_km(t_end,:) - pos_true_km(t_end,:));
-    vel_diff_end    = norm(vel_eci_kmps(t_end,:) - vel_true_kmps(t_end,:));
+    pos_diff_end    = norm(pos_eci_km(t_end*10+1,:) - pos_true_km(t_end+1,:));
+    vel_diff_end    = norm(vel_eci_kmps(t_end*10+1,:) - vel_true_kmps(t_end+1,:));
     
-    pos_drift_per_dt   = (pos_diff_end - pos_diff_init)/t_end;
-    vel_drift_per_dt   = (vel_diff_end - vel_diff_init)/t_end;
+    pos_drift_per_dt   = (pos_diff_end - pos_diff_init)/length(tout);
+    vel_drift_per_dt   = (vel_diff_end - vel_diff_init)/length(tout);
     
     % plot trajectory
     REKM = 6378.135; % earth radius [km]
@@ -151,11 +151,11 @@ elseif run_test == 2
     pos_diff_init   = norm(pos_eci_km(1,:) - pos_true_km(1,:));
     vel_diff_init   = norm(vel_eci_kmps(1,:) - vel_true_kmps(1,:));
     
-    pos_diff_end    = norm(pos_eci_km(t_end,:) - pos_true_km(t_end,:));
-    vel_diff_end    = norm(vel_eci_kmps(t_end,:) - vel_true_kmps(t_end,:));
+    pos_diff_end    = norm(pos_eci_km(t_end*10+1,:) - pos_true_km(t_end+1,:));
+    vel_diff_end    = norm(vel_eci_kmps(t_end*10+1,:) - vel_true_kmps(t_end+1,:));
     
-    pos_drift_per_dt   = (pos_diff_end - pos_diff_init)/t_end;
-    vel_drift_per_dt   = (vel_diff_end - vel_diff_init)/t_end;
+    pos_drift_per_dt   = (pos_diff_end - pos_diff_init)/length(tout);
+    vel_drift_per_dt   = (vel_diff_end - vel_diff_init)/length(tout);
     
     REKM = 6378.135; % earth radius [km]
     figure(1), hold on
