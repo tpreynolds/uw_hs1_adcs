@@ -8,7 +8,7 @@ function [ constants ] = init_fsw_constants()
 % ----------------------------------------------------------------------- %
 
 % Time
-constants.time.dut1     = 0.0;
+constants.time.dut1     = 0.06420;
 constants.time.dAT      = 37.0;
 constants.time.gps2tai  = 19.0;
 constants.time.gps2tt   = 32.184 + constants.time.gps2tai;
@@ -28,9 +28,22 @@ constants.convert.M2KM  = 1e-3;
 constants.convert.NT2T  = 1e-9;
 constants.convert.RPM_2_radps   = (pi/30);
 constants.convert.radps_2_RPM   = (30/pi);
+constants.convert.revpday_2_radpmin     = 2*pi/1440;
 constants.convert.deg2rad       = pi/180;
 constants.convert.rad2deg       = 180/pi;
 constants.convert.asec2rad      = 1/3600 * constants.convert.deg2rad;
+constants.convert.rev2rad       = 2*pi;
+constants.convert.rad2rev       = 1/(2*pi);
+
+% Mag field approx
+x   = load('mag_field_approx.mat');
+constants.mag.b0    = x.x(1:3);
+constants.mag.b1    = x.x(4:6);
+constants.mag.b2    = x.x(7:9);
+constants.mag.b3    = x.x(10:12);
+constants.mag.b4    = x.x(13:15);
+constants.mag.b5    = x.x(16:18);
+constants.mag.b6    = x.x(19:21);
 
 % Misc.
 constants.twopi     = 2*pi;

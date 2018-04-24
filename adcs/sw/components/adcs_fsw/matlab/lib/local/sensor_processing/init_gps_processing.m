@@ -4,7 +4,7 @@ function [ gps ] = init_gps_processing( fsw_params )
 %
 % Initializes all parameters in the gps_processing library.
 %
-% T. Reynolds -- 2.28.18
+% T. Reynolds -- 4.18.18
 % ----------------------------------------------------------------------- %
 
 % Pull constants
@@ -17,9 +17,9 @@ day2sec = fsw_params.constants.time.day2sec;
 gps.sample_time_s     = fsw_params.sample_time_s;
 
 % Initialize positions in TEME, ECI and ECEF frames
-gps.ic.time = fsw_params.environment.sgp4.ic.gps_time;
+gps.ic.time = fsw_params.env_estimation.orb_estimation.sgp4.ic.gps_time;
 [gps.ic.pos_teme_km,gps.ic.vel_teme_kmps] = ...
-                            TLE2ECI(fsw_params.environment.sgp4.orbit_tle);
+          TLE2ECI(fsw_params.env_estimation.orb_estimation.sgp4.orbit_tle);
                         
 gps.ic.pos_teme_m   = KM2M*gps.ic.pos_teme_km;
 gps.ic.vel_teme_mps = KM2M*gps.ic.vel_teme_kmps;

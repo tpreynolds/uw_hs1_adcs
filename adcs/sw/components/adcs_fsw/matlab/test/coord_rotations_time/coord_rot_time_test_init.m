@@ -127,11 +127,12 @@ fsw_params.sensor_processing.gps.dut1 = -0.0187545;
 
 % Convert this [y m d h m s] into GPS time and add account for leap secs
 gps_week    = 804;
-gps_sec     = 418683 + 37.0 - 19.0 + sec_frac - 1.0;
+gps_sec     = 418683 + 37.0 - 19.0 + sec_frac;
 
 % override the initial GPS time
 sim_params.environment.sgp4.gps_week_init   = gps_week;
 sim_params.environment.sgp4.gps_sec_init    = gps_sec;
+sim_params.environment.sgp4.ic.gps_time     = [ gps_sec; gps_week ];
 
 % Simulation parameters
 run_time    = num2str(t_end);
@@ -180,11 +181,12 @@ T_TT    = 0.043674121031;
 % Convert this [y m d h m s] into GPS time and account for leap seconds
 % Note: in 2004 we had TAI-UTC = 32.0. 
 gps_week    = 1270;
-gps_sec     = 492180 + 37.0 - 19.0;
+gps_sec     = 492193 + 37.0 - 19.0;
 
 % override the initial GPS time
 sim_params.environment.sgp4.gps_week_init   = gps_week;
 sim_params.environment.sgp4.gps_sec_init    = gps_sec;
+sim_params.environment.sgp4.ic.gps_time     = [ gps_sec; gps_week ];
 
 % Simulation parameters
 run_time    = num2str(t_end);

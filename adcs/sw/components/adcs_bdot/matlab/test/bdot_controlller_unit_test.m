@@ -23,13 +23,12 @@ run_test = 1;
 %% Test 1
 if( run_test == 1 )
 % Initialization
-fsw_params          = init_fsw_params();
-sim_params          = init_sim_params(fsw_params);
-fsw_params.bdot     = init_bdot_controller(fsw_params);
+fsw_params                  = init_fsw_params();
+[sim_params, fsw_params]    = init_sim_params(fsw_params);
+fsw_params.bdot             = init_bdot_controller(fsw_params);
 
 % ----- Overrides ----- %
-sim_params.environment.avg_b = [1.59212e-5 -6.1454e-6 4.0276e-5]; % T
-sim_params.dynamics.ic.rate_init    = [ 0.12; -0.2; 0.05 ];
+sim_params.dynamics.ic.rate_init    = [ 0.2; 0.2; 0.2 ];
 % --------------------- %
 
 % Simulation parameters

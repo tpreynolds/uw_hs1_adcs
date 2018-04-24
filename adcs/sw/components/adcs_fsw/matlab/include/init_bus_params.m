@@ -17,19 +17,19 @@ bus.inertia = [ 0.033800072 -0.0000488358 -0.00007392968;
                -0.00007392968 0.00000712402 0.00742076536 ];
                       
 % Moments of inertia (cuboid approximation)
-% Ix = (fsw_params.sc.mass/12)*(fsw_params.sc.dy^2+fsw_params.sc.dz^2);    % X-axis inertia
-% Iy = (fsw_params.sc.mass/12)*(fsw_params.sc.dx^2+fsw_params.sc.dz^2);    % Y-axis inertia
-% Iz = (fsw_params.sc.mass/12)*(fsw_params.sc.dx^2+fsw_params.sc.dy^2);    % Z-axis inertia
+% Ix = (fsw_params.sc.mass/12)*(fsw_params.sc.dy^2+fsw_params.sc.dz^2);    
+% Iy = (fsw_params.sc.mass/12)*(fsw_params.sc.dx^2+fsw_params.sc.dz^2);    
+% Iz = (fsw_params.sc.mass/12)*(fsw_params.sc.dx^2+fsw_params.sc.dy^2);    
 
 % Other parameters
-bus.quat.id             = [ 1; 0; 0; 0];
+bus.quat.id             = [ 1; 0; 0; 0 ];
 bus.RW_RPM_thresh.max   = 10e3;
 bus.RW_RPM_thresh.min   = 2e3;
 bus.omega_radps_thresh.max = 0.12;
-bus.omega_radps_thresh.min = 0.00436; % 0.25 deg/s 
-bus.bstar               = 3.2923e-5;        % drag term for SGP4 from SWISSCUBE
-bus.sync_pulse          = 2;                % [s] minor sync pulse for duty cycling PPT
-bus.dut1                = 0;                % SGP4 wants a UTC time
-bus.vel_point_tol       = 12;               % degrees
+bus.omega_radps_thresh.min = 0.00436;   % 0.25 deg/s 
+bus.bstar               = 3.2923e-5;    % drag term for SGP4 from SWISSCUBE
+bus.sync_pulse          = 2;            % [s] minor sync pulse for duty cycling PPT
+bus.dut1                = 0;            % SGP4 wants a UTC time
+bus.point_tol           = 12;           % degrees
 end
 

@@ -26,3 +26,6 @@ ECC_true    = 0.832853;
 % Convert back to inertial
 orbit_tle   = [ 18; 0.0; 0.0; INC; RAAN; ECC; AOP; MNA; MNM ];
 [r,v] = OEV2RV(orbit_tle);
+
+% Compute values for swisscube (SC) at epoch
+[rTEME,vTEME,FLAG2] = OEV2RV(fsw_params.bus.orbit_tle);
