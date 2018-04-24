@@ -15,5 +15,8 @@ target_gen.ic.quat      = [ 1; 0; 0; 0 ];
 target_gen.ic.omega     = [ 0; 0; 0 ];
 target_gen.ic.flag      = 0;
 
+temp                = load('r_SEA.mat');
+target_gen.r_SEA    = reshape(temp.r_SEA,3,1);
+
 end
 
