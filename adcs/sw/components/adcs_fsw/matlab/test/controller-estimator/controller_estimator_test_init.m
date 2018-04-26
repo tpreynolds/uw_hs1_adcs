@@ -16,11 +16,13 @@ set(0,'defaulttextinterpreter','latex');
 % seed the random initial conditions so you get the same stuff everytime
 rng(155);
 
+fsw_params.sensor_processing.gps   = init_gps_processing(fsw_params);
+
 % Attitude conditions
 quat_cmd = randn(4,1);%-[-0.1; 0.2; 0.3; 0.4];
 quat_cmd = quat_cmd/norm(quat_cmd);
-sim_params.dynamics.ic.quat_init        = [1 0 0 0]';
-fsw_params.estimation.ic.quat_est_init  = rand(4,1);
+sim_params.dynamics.ic.quat_init        = quat_cmd';
+fsw_params.estimation.ic.quat_est_init  = quat_cmd';
 
 % Angular velocity
 fsw_params.estimation.ic.rt_w_body_radps    = 0*[0.01 -0.05 -0.03]';
@@ -32,20 +34,20 @@ var_mult_sun    = 1;
 var_mult_gyro   = 1;
 
 % Inertial measurement vectors
-mag_vec_init = [4 1 -8]';
-mag_vec_init = mag_vec_init/norm(mag_vec_init);
+mag_vec_body = [4 1 1]';
+mag_vec_body = mag_vec_body/norm(mag_vec_body);
 
-sun_vec_init = [9 -3 18]';
-sun_vec_init = sun_vec_init/norm(sun_vec_init);
+sun_vec_body = [9 -3 18]';
+sun_vec_body = sun_vec_body/norm(sun_vec_body);
 
 % body frame
 A = quatToMatrix(quat_cmd);
-fsw_params.estimation.ic.rt_mag_eci_est = mag_vec_init;%.*randn(3,1);
-fsw_params.estimation.ic.rt_sun_eci_est = sun_vec_init;%.*randn(3,1);
+fsw_params.estimation.ic.rt_mag_eci_est = A*mag_vec_body;%.*randn(3,1);
+fsw_params.estimation.ic.rt_sun_eci_est = A*sun_vec_body;%.*randn(3,1);
 
 % reference frame
-fsw_params.estimation.ic.rt_mag_body = A'*mag_vec_init;%.*randn(3,1);
-fsw_params.estimation.ic.rt_sun_body = A'*sun_vec_init;%.*randn(3,1);
+fsw_params.estimation.ic.rt_mag_body = mag_vec_body;%.*randn(3,1);
+fsw_params.estimation.ic.rt_sun_body = sun_vec_body;%.*randn(3,1);
 
 % Run the test
 run_time    = '200';
