@@ -9,8 +9,8 @@
 % Start fresh
 clear variables; close all; clc
 set(0,'defaulttextinterpreter','latex');
-addpath(genpath('../../../../matlab/')) % adds the fsw libs
-addpath(genpath('../../../../../adcs_sim/matlab/')) % add the sim libs
+% addpath(genpath('../../../../matlab/')) % adds the fsw libs
+% addpath(genpath('../../../../../adcs_sim/matlab/')) % add the sim libs
 
 % Load bus stub definitions
 load('bus_definitions.mat')
