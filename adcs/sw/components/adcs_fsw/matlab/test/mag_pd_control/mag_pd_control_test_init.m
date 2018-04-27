@@ -40,12 +40,12 @@ run('sim_init.m')
 % fsw_params.control.pd_controller.d_gain  = -2*wn*z.*J;
 
 % Set commanded state
-eul_angle   = deg2rad(30);
-eul_axis    = [1; 0; 0];
-eul_axis    = eul_axis./norm(eul_axis);
-quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
+% eul_angle   = deg2rad(5);
+% eul_axis    = [1; 0; 0];
+% eul_axis    = eul_axis./norm(eul_axis);
+% quat_cmd    = [cos(eul_angle/2); sin(eul_angle/2).*eul_axis];
 % quat_cmd    = [1/2;1/2;1/2;1/2];
-% quat_cmd    = [1;0;0;0];
+quat_cmd    = [1;0;0;0];
 omega_cmd   = zeros(3,1);
 
 % Set sim time
@@ -55,9 +55,9 @@ t_end   = 360;
 sim_params.sensors.magnetometer.noise = 0;
 
 % choose dipole
-fsw_params.actuators.magnetorquer.max_dipole_x  = 5; %0.5;
-fsw_params.actuators.magnetorquer.max_dipole_y  = 5; %0.5;
-fsw_params.actuators.magnetorquer.max_dipole_z  = 5; %0.5;
+fsw_params.actuators.magnetorquer.max_dipole_x  = 0.2;
+fsw_params.actuators.magnetorquer.max_dipole_y  = 0.2;
+fsw_params.actuators.magnetorquer.max_dipole_z  = 0.2;
 
 % Digital value range
 digital_value    = 127;
@@ -77,6 +77,27 @@ fsw_params.control.cmd_processing.dv_2_m_Z   = ...
                         fsw_params.actuators.magnetorquer.max_dipole_z /...
                             digital_value;
 fsw_params.control.cmd_processing.m_2_dv_Z   = 1/fsw_params.control.cmd_processing.dv_2_m_Z;
+% -----
+
+%Control Gains
+% fsw_params.control.mag_pd_controller.p_gain = 1/1000000;
+
+% fsw_params.control.mag_pd_controller.d_gain = 1/1000000;
+
+% -----
+% Example from Torczynski, 2010
+% fsw_params.bus.inertia = diag([0.037 0.036 0.006]);
+% sim_params.bus.inertia = diag([0.037 0.036 0.006]);
+init_quat = eul2quat(deg2rad(45*[1 1 1]))';
+
+sim_params.dynamics.ic.quat_init = init_quat;
+sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
+
+fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
+fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
+
+omega_cmd   = zeros(3,1);
+
 % -----
 
 % Simulation parameters
