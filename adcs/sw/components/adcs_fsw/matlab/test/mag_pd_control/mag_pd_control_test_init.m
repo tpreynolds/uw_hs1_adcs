@@ -24,7 +24,7 @@ if run_test == 1
 run('sim_init.m')
 
 % Set sim time
-t_end   = 40000;
+t_end   = 4000;
 
 % Overrides
 
