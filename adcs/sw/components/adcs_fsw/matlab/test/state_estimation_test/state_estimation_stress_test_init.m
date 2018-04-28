@@ -51,7 +51,7 @@ fsw_params.estimation.ic.rt_sun_body = sun_vec_body;%.*randn(3,1);
 
 % Run the test
 run_time    = '200';
-mdl         = 'state_estimation_test';
+mdl         = 'state_estimation_stress_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
 sim(mdl);
@@ -74,10 +74,10 @@ plot(quat_true.Time, quat_true.Data(:,1),'r')
 plot(quat_true.Time, quat_true.Data(:,2),'b')
 plot(quat_true.Time, quat_true.Data(:,3),'k')
 plot(quat_true.Time, quat_true.Data(:,4),'g')
-plot(quat_true.Time, quat_cmd(1)*ones(size(quat_true.Time)), 'k','linewidth',2)
-plot(quat_true.Time, quat_cmd(2)*ones(size(quat_true.Time)), 'k','linewidth',2)
-plot(quat_true.Time, quat_cmd(3)*ones(size(quat_true.Time)), 'k','linewidth',2)
-plot(quat_true.Time, quat_cmd(4)*ones(size(quat_true.Time)), 'k','linewidth',2)
+% plot(quat_true.Time, quat_cmd(1)*ones(size(quat_true.Time)), 'k','linewidth',2)
+% plot(quat_true.Time, quat_cmd(2)*ones(size(quat_true.Time)), 'k','linewidth',2)
+% plot(quat_true.Time, quat_cmd(3)*ones(size(quat_true.Time)), 'k','linewidth',2)
+% plot(quat_true.Time, quat_cmd(4)*ones(size(quat_true.Time)), 'k','linewidth',2)
 
 h3 = figure;
 plot(bias_hat)
