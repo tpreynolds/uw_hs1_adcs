@@ -16,7 +16,7 @@ CAN.ic.COM2_on                  = 0;
 CAN.ic.PPT_on                   = 0;
 CAN.ic.sync_pulse_period_s      = 2;
 CAN.ic.PPT_on_sync_pct          = 60;
-CAN.ic.MET                      = sim_params.MET.epoch;
+CAN.ic.MET                      = 0;
 
 % Update fsw.bus initial condition
 CAN.ic.all              = [ CAN.ic.override;
