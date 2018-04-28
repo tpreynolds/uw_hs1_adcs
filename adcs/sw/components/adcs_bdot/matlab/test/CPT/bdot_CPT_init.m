@@ -27,7 +27,7 @@ CPT_fid     = strcat(datadir,'bdot_CPT',char(date),'.','csv');
 failed      = 0; % counter for number of failed tests ( if any )
 
 % ----- Overrides ----- %
-run_time    = 10800; % [s] -- roughly two orbits
+run_time    = 100; % [s] -- roughly two orbits
 % --------------------- %
 
 for k = 1:numTest
@@ -49,6 +49,22 @@ for k = 1:numTest
     load_system(mdl);
     set_param(mdl, 'StopTime', num2str(run_time));
     sim(mdl);
+    
+    % Extract States
+    states = logsout.getElement('states').Values;
+    sc_quat = states.quaternion;
+    omega_radps = states.body_rates_radps;
+    % Extract Actuator measurements
+    act_meas = logsout.getElement('act_meas').Values;
+    % Extract Commands
+    cmds = logsout.getElement('commands').Values;
+    MT_dv = cmds.MT_dv;
+    % Extract sensor processing output
+    sp2fsw = logsout.getElement('sp2fsw').Values;
+    mag_meas = sp2fsw.mag_vec_body_T;
+    % Extract B-dot tumble status
+    tumble = logsout.getElement('tumble').Values;
+    tumble_t = logsout.getElement('tumble').Values.Time;
     
     % Save results of the test to an array
     W(k,1)  = norm(sim_params.dynamics.ic.rate_init);
