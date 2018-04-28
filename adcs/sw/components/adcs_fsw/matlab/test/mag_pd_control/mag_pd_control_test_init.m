@@ -24,7 +24,7 @@ if run_test == 1
 run('sim_init.m')
 
 % Set sim time
-t_end   = 4000;
+t_end   = 40000;
 
 % Overrides
 
@@ -35,12 +35,18 @@ t_end   = 4000;
 % sim_params.dynamics.ic.quat_init    = [1; 0; 0; 0];
 
 % Choose damping ratio and natural frequency
-% J  = fsw_params.bus.inertia;
-% z   = 1; % Critically damped
-% wn  = 2*pi; % Small natural frequency
-% 
-% fsw_params.control.pd_controller.p_gain  = -wn^2.*J;
-% fsw_params.control.pd_controller.d_gain  = -2*wn*z.*J;
+J  = fsw_params.bus.inertia;
+z   = 1; % Critically damped
+wn  = pi/2; % Small natural frequency
+
+fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
+fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
+
+% fsw_params.control.pd_controller.p_gain  = wn^2.*J;
+% fsw_params.control.pd_controller.d_gain  = 2*wn*z.*J;
+
+% syms wn z
+% sol = solve([wn^2.*J;2*wn*z.*J]==[-diag([-0.03  -0.03  -0.15]);-diag([-21  -21  -35])],[wn z]);
 
 % Set commanded state
 % eul_angle   = deg2rad(5);
@@ -93,8 +99,8 @@ init_quat = eul2quat(deg2rad(45*[1 1 1]))';
 sim_params.dynamics.ic.quat_init = init_quat;
 sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 
-fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
-fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
+% fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
+% fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
 
 % -----
 
@@ -104,7 +110,7 @@ mdl         = 'mag_pd_control_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
 sim(mdl);
-%%
+
 % ----- Analyze Results ----- %
 
 quat        = logsout.getElement('<quaternion>').Values.Data;
@@ -113,14 +119,16 @@ cmd_DV      = logsout.getElement('cmd_DV').Values.Data;
 cmd_time    = logsout.getElement('cmd_DV').Values.Time;
 real_dp     = logsout.getElement('dipole').Values.Data;
 real_time   = logsout.getElement('dipole').Values.Time;
-eul         = radtodeg(quat2eul(quat));
+eul         = rad2deg(quat2eul(quat));
 cmd_dp      = [fsw_params.control.cmd_processing.dv_2_m_X fsw_params.control.cmd_processing.dv_2_m_Y fsw_params.control.cmd_processing.dv_2_m_Z].*double(cmd_DV);
 
 q_d         = quat_cmd; %fsw_params.bus.quat_commanded;
 diff        = zeros(1,length(tout));
+angle       = zeros(1,length(tout));
 for i = 1:length(tout)
     q_diff  = quatmultiply(quatconj(q_d'),quat(i,:));
     diff(i) = norm( q_diff(2:4) ) ;
+    angle(i) = rad2deg(2*acos(quat(i,1)));
 end
 
 % ----- End Analysis ----- %
@@ -150,6 +158,12 @@ plot(tout,0.02*ones(1,length(tout)),'k--')
 %plot([ts ts],[0 1],'k--')
 xlabel('Time [s]','FontSize',12)
 title('Error')
+
+% Angle Error
+figure(5)
+plot(tout,angle)
+xlabel('Time [s]','FontSize',12)
+ylabel('THE Euler Angle')
 
 % Euler Angles
 figure(4)
