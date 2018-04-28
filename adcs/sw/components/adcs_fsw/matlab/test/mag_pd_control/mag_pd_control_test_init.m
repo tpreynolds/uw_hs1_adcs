@@ -100,7 +100,7 @@ fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
 
 % Simulation parameters
 run_time    = num2str(t_end);
-mdl         = 'mag_pd_control_test_new';
+mdl         = 'mag_pd_control_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
 sim(mdl);
@@ -211,7 +211,7 @@ fsw_params.control.cmd_processing.m_2_dv_Z   = 1/fsw_params.control.cmd_processi
 
 % Simulation parameters
 run_time    = num2str(t_end);
-mdl         = 'mag_pd_control_test_new';
+mdl         = 'mag_pd_control_test';
 load_system(mdl);
 set_param(mdl, 'StopTime', run_time);
 % sim(mdl);
