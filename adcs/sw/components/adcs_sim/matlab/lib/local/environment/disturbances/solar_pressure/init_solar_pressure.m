@@ -4,7 +4,7 @@ function sol_p = init_solar_pressure(fsw_params)
 % Initializes the solar radiation pressure torque library
 %   Ref: dR-D-F, Spacecraft Dynamics & Control, 2013, pp 228-229.
 %
-% Last Update: S. Rice, 2.16.18
+% Last Update: S. Rice, 4.16.18
 
 % Toggle 0/1 for turning solar pressure on/off as a disturbance torque
 sol_p.on    = 0;
