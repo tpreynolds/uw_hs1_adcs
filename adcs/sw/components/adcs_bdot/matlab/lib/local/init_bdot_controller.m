@@ -39,7 +39,7 @@ bdot.filter_num     = bdot.filter_num(2);
 bdot.filter_den     = bdot.filter_den(2);
 
 % Conversions
-bdot.digital_value  = 127; 
+bdot.digital_value  = 100; 
 bdot.dv_2_m_X   = fsw_params.actuators.magnetorquer.max_dipole_x/...
                     bdot.digital_value;
 bdot.m_2_dv_X   = 1/bdot.dv_2_m_X;
