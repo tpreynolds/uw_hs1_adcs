@@ -5,7 +5,7 @@
 % choose the control gains. Uses either a random initial condition or
 % identity quaternion, and commands a given slewing maneuver.
 
-% Test 2: Gain test`
+% Test 2: Recreating results from XXXXXX.
 
 % UW HuskySat-1, ADCS Subsystem
 %  Last Update: T. Reynolds 3.29.18
@@ -215,6 +215,11 @@ fsw_params.control.cmd_processing.dv_2_m_Z   = ...
                             digital_value;
 fsw_params.control.cmd_processing.m_2_dv_Z   = 1/fsw_params.control.cmd_processing.dv_2_m_Z;
 % -----
+
+% -----
+% Example from Torczynski, 2010
+% fsw_params.bus.inertia = diag([0.037 0.036 0.006]);
+% sim_params.bus.inertia = diag([0.037 0.036 0.006]);
 init_quat = eul2quat(deg2rad(45*[1 1 1]))';
 
 sim_params.dynamics.ic.quat_init = init_quat;
@@ -222,15 +227,17 @@ sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 
 % -------------------------------------------------------
 
+
 % Simulation parameters
-[gain_p,gain_d] = meshgrid(0.01:0.4:2,1:6:30);
+
+[gain_p,gain_d] = meshgrid(0.1:0.1:2,0.1:0.1:2);
 gains = [gain_p(:) gain_d(:)]; 
 p = length(gains);
 
 for i=1:p
     % Gains
-    fsw_params.control.mag_pd_controller.p_gain = -gains(i,1)*eye(3);
-    fsw_params.control.mag_pd_controller.d_gain = -gains(i,2)*eye(3);
+    fsw_params.control.mag_pd_controller.p_gain = -gains(i,1);
+    fsw_params.control.mag_pd_controller.d_gain = -gains(i,2);
     
     run_time    = num2str(t_end);
     mdl         = 'mag_pd_control_test';
