@@ -182,7 +182,7 @@ elseif run_test == 2
 run('sim_init.m')
 
 % Set sim time
-t_end   = 40000;
+t_end   = 20000;
 
 % Overrides
 quat_cmd    = [1;0;0;0];
@@ -256,7 +256,7 @@ for i=1:p
     if settle_t(i,2) ~= N
         steady(i) = rms(avg_eul(settle_t(i,2):end));
     end
-    
+    i
 end
 
 ST = reshape(settle_t(:,1),size(gain_p)); %settling time
@@ -310,20 +310,20 @@ xlabel('Time [s]','FontSize',12)
 title('Error')
 
 % Angle Error
-figure(5)
+figure(4)
 plot(tout,angle)
 xlabel('Time [s]','FontSize',12)
 ylabel('THE Euler Angle')
 
 % Euler Angles
-figure(4)
+figure(5)
 plot(tout,eul(:,1),tout,eul(:,2),tout,eul(:,3))
 xlabel('Time [s]','FontSize',12)
 legend('Z','Y','X')
 title('Euler Angles')
-
+%%
 % Settling time
-figure(5)
+figure(6)
 surf(gain_p,gain_d,ST)
 view([142.5,30])
 xlabel('p Gain')
@@ -332,7 +332,7 @@ zlabel('Settling Time')
 grid minor
 
 % Steady State rms
-figure(6)
+figure(7)
 surf(gain_p,gain_d,SS)
 view([142.5,30])
 xlabel('p Gain')
