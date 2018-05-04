@@ -5,7 +5,7 @@
 % choose the control gains. Uses either a random initial condition or
 % identity quaternion, and commands a given slewing maneuver.
 
-% Test 2: Gain test`
+% Test 2: Gain test
 
 % UW HuskySat-1, ADCS Subsystem
 %  Last Update: T. Reynolds 3.29.18
@@ -14,7 +14,7 @@
 clear variables; close all; clc;
 set(0,'defaulttextinterpreter','latex');
 
-run_test    = 2;
+run_test = 2;
 
 %% Test 1
 
@@ -226,6 +226,9 @@ sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 [gain_p,gain_d] = meshgrid(0.01:0.4:2,1:6:30);
 gains = [gain_p(:) gain_d(:)]; 
 p = length(gains);
+settle_t = zeros(p,2);
+steady = zeros(p,1);
+
 
 for i=1:p
     % Gains
@@ -237,8 +240,28 @@ for i=1:p
     load_system(mdl);
     set_param(mdl, 'StopTime', run_time);
     sim(mdl);
+    avg_eul     = logsout.getElement('avg_eul_proc').Values.Data;
+    avg_eul_t   = logsout.getElement('avg_eul_proc').Values.Time;
+    N = length(avg_eul_t);
+%     settle_t(i,1) = NaN;
+    settle_t(i,2) = N;
+    for j=1:N
+        if isnan(avg_eul(N-j-1)) ~= 1
+            settle_t(i,1) = avg_eul_t(N-j-1);
+            settle_t(i,2) = N-j-1;
+        else
+            break
+        end
+    end
+%     steady(i) = NaN;
+    if settle_t(i,2) ~= N
+        steady(i) = rms(avg_eul(settle_t(i,2):end));
+    end
     
 end
+
+ST = reshape(settle_t(:,1),size(gain_p)); %settling time
+SS = reshape(steady,size(gain_p)); %steady state rms
 
 % ----- Analyze Results ----- %
 quat        = logsout.getElement('<quaternion>').Values.Data;
@@ -300,6 +323,23 @@ xlabel('Time [s]','FontSize',12)
 legend('Z','Y','X')
 title('Euler Angles')
 
+% Settling time
+figure(5)
+surf(gain_p,gain_d,ST)
+view([142.5,30])
+xlabel('p Gain')
+ylabel('d Gain')
+zlabel('Settling Time')
+grid minor
+
+% Steady State rms
+figure(6)
+surf(gain_p,gain_d,SS)
+view([142.5,30])
+xlabel('p Gain')
+ylabel('d Gain')
+zlabel('Steady State RMS')
+grid minor
 
 %save('workspace-test-NAME.mat')
 end
