@@ -223,7 +223,7 @@ sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 % -------------------------------------------------------
 
 % Simulation parameters
-[gain_p,gain_d] = meshgrid(0.01:0.008:0.08,15:3.5:45);
+[gain_p,gain_d] = meshgrid(0.001:0.003:0.1,5:2:22);
 gains = [gain_p(:) gain_d(:)]; 
 p = length(gains);
 settle_t = zeros(p,2);
@@ -250,18 +250,18 @@ for i=1:p
     settle_t(i,2) = N;
     if Flag == 0
         for j=1:N
-            if isnan(avg_eul(N-j-1)) ~= 1
-                settle_t(i,1) = avg_eul_t(N-j-1);
-                settle_t(i,2) = N-j-1;
+            if isnan(avg_eul(N-j+1)) ~= 1
+                settle_t(i,1) = avg_eul_t(N-j+1);
+                settle_t(i,2) = N-j+1;
             else
                 break
             end
         end
-        if settle_t(i,2) ~= N && settle_t(i,2) ~= 0
+        if settle_t(i,2) ~= N
             steady(i) = rms(avg_eul(settle_t(i,2):end));
         end
     end
-    if mod(i,124)==0
+    if mod(i,27)==0
         fname = sprintf('seg%d.mat', k);
         save(fname,'settle_t','steady')
         k=k+1;
@@ -335,7 +335,7 @@ SS = reshape(steady,size(gain_p)); %steady state rms
 
 % Settling time
 figure(6)
-surf(gain_p,gain_d,ST)
+surf(gain_p,gain_d,ST,'FaceColor','interp')
 view([142.5,30])
 xlabel('p Gain')
 ylabel('d Gain')
@@ -344,7 +344,7 @@ grid minor
 
 % Steady State rms
 figure(7)
-surf(gain_p,gain_d,SS)
+surf(gain_p,gain_d,SS,'FaceColor','interp')
 view([142.5,30])
 xlabel('p Gain')
 ylabel('d Gain')
