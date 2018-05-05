@@ -11,7 +11,7 @@ function [ cmd_processing ] = init_cmd_processing(fsw_params)
 
 
 % Digital value range for MTQs
-cmd_processing.digital_value    = 127;
+cmd_processing.digital_value    = 100;
 
 % Conversions for MTQs
 cmd_processing.dv_2_m_X   = ...
