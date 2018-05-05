@@ -113,6 +113,22 @@ for k = 1:numTest
     sc2_sun_unit_unaligned = envest_2_fsw.sc2sun_unit;
     mag_eci_unit_unaligned = envest_2_fsw.mag_eci_unit;
     
+    % Extract States
+    states = logsout.getElement('states').Values;
+    sc_quat = states.quaternion;
+    omega_radps = states.body_rates_radps;
+    % Extract Actuator measurements
+    act_meas = logsout.getElement('act_meas').Values;
+    % Extract Commands
+    cmds = logsout.getElement('commands').Values;
+    MT_dv = cmds.MT_dv;
+    % Extract sensor processing output
+    sp2fsw = logsout.getElement('sp2fsw').Values;
+    mag_meas = sp2fsw.mag_vec_body_T;
+    % Extract B-dot tumble status
+    tumble = logsout.getElement('tumble').Values;
+    tumble_t = logsout.getElement('tumble').Values.Time;
+    
     % Save results of the test to an array
     W(k,1)  = norm(sim_params.dynamics.ic.rate_init);
     W(k,2)  = norm(omega_radps.Data(end,:));
