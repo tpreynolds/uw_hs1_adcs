@@ -47,6 +47,7 @@ fsw_params.target_gen       = init_target_generation(fsw_params);
 % -------------------------------- %
 
 % ----- Controllers ----- %
+fsw_params.control.sun_point            = init_sun_point(fsw_params);
 fsw_params.control.mag_pd_controller    = init_mag_pd_controller(fsw_params);
 fsw_params.control.cmd_processing       = init_cmd_processing(fsw_params);
 % ----------------------- %
