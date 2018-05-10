@@ -35,7 +35,7 @@ failed      = 0; % counter for number of failed tests ( if any )
 
 % ----- Overrides ----- %
 % One orbit is 1 hour 45 min
-run_time    = 60 * 30 * 1; % [s] -- roughly two orbits
+run_time    = 60 * 2 * 1; % [s] -- roughly two orbits
             % sec  min  hr
 % --------------------- %
 
@@ -57,7 +57,7 @@ for k = 1:numTest
     two_axis_zero_xy = [ 0 ; 0 ; 0.4 ];
     two_axis_zero_yz = [ 0.4 ; 0 ; 0];
     all_axis_zero = [ 0 ; 0 ; 0];
-    sim_params.dynamics.ic.rate_init = two_axis_zero_xy;
+    sim_params.dynamics.ic.rate_init = all_axis_zero;
     
     % Sim model
     mdl     = 'adcs_sim_main';
@@ -150,9 +150,9 @@ end
 
 % Save full test data for one run to csv file
 if( T(numTest) ~= -1 )
-    i_of_sp2fsw = 2;
-    i_of_CAN_IN = 2;
-    i_of_envest_2_fsw = 2;
+    i_of_sp2fsw = 1;
+    i_of_CAN_IN = 1;
+    i_of_envest_2_fsw = 1;
     [rows, cols] = size(tout);
     rows_tout = rows;
     mag_readings = zeros(rows, 3);
@@ -201,16 +201,16 @@ if( T(numTest) ~= -1 )
         
         % Align sensorproc data
         if tout(t) >= sun_meas.Time(i_of_sp2fsw)
-            env_mag(t,:) = env_mag_data(i_of_sp2fsw,:);
-            mag_readings(t,:) = mag_data(i_of_sp2fsw,:);
-            gyro_meas_aligned(t,:) = gyro_meas_data(i_of_sp2fsw,:);
-            sun_meas_aligned(t,:) = sun_meas_data(i_of_sp2fsw,:);
+            
+            mag_readings(t,:)       = mag_data(i_of_sp2fsw,:);
+            gyro_meas_aligned(t,:)  = gyro_meas_data(i_of_sp2fsw,:);
+            sun_meas_aligned(t,:)   = sun_meas_data(i_of_sp2fsw,:);
             i_of_sp2fsw = i_of_sp2fsw + 1;
         else
             sun_meas_aligned(t,:) = sun_meas_data(i_of_sp2fsw - 1,:);
             gyro_meas_aligned(t,:) = gyro_meas_data(i_of_sp2fsw - 1,:);
             mag_readings(t,:) = mag_data(i_of_sp2fsw - 1,:);
-            env_mag(t,:) = env_mag_data(i_of_sp2fsw - 1,:);
+            
         end
         
         % Magnetometer command conversion
@@ -255,12 +255,14 @@ if( T(numTest) ~= -1 )
         end
         % Output alignment
         if tout(t) >= sc_in_sun_unaligned.Time(i_of_envest_2_fsw)
+            env_mag(t,:) = env_mag_data(i_of_envest_2_fsw,:);
             sc_in_sun_aligned(t,:) = sc_in_sun_data(i_of_envest_2_fsw,:);
             sc_above_gs_aligned(t,:) = sc_above_gs_data(i_of_envest_2_fsw,:);
             sc2_sun_unit_aligned(t,:) = sc2_sun_unit_data(i_of_envest_2_fsw,:);
             mag_eci_unit_aligned(t,:) = mag_eci_unit_data(i_of_envest_2_fsw,:);
             i_of_envest_2_fsw = i_of_envest_2_fsw + 1;
         else
+            env_mag(t,:) = env_mag_data(i_of_envest_2_fsw - 1,:);
             sc_in_sun_aligned(t,:) = sc_in_sun_data(i_of_envest_2_fsw - 1,:);
             sc_above_gs_aligned(t,:) = sc_above_gs_data(i_of_envest_2_fsw - 1,:);
             sc2_sun_unit_aligned(t,:) = sc2_sun_unit_data(i_of_envest_2_fsw - 1,:);
@@ -360,37 +362,21 @@ if( T(numTest) ~= -1 )
         mag_readings gyro_meas_aligned sun_meas_aligned ];
     
     % Writes the header for all the csv files.
-    sim_header_arr = string(header_sim)';
-    bdot_header_arr = string(header_bdot)';
-    sensorproc_header_arr = string(header_sensorproc)';
-    estim_header_arr = string(header_estim)';
-    combined_bdot_header = [ sim_header_arr bdot_header_arr ];
-    combined_sensorproc_header = [ sim_header_arr sensorproc_header_arr ];
-    combined_estim_header = [ sim_header_arr estim_header_arr ];
-    
+    h_sim = join(header_sim, ',') + ',';
+    string_h_bdot = h_sim + join(header_bdot, ',');
+    string_h_sensorproc = h_sim + join(header_sensorproc, ',');
+    string_h_estim = h_sim + join(header_estim, ',');
     % Writes the header for the bdot file
-    [~, cols] = size(combined_bdot_header);
     fid = fopen(DATA_fid,'w'); 
-    for i = 1:(cols - 1)
-      fprintf(fid,'%s,',combined_bdot_header(i));  
-    end
-    fprintf(fid,'%s\n',combined_bdot_header(cols));
+    fprintf(fid, string_h_bdot + '\n');
     fclose(fid);
     % Writes the header for the sensorproc file
-    [~, cols] = size(combined_sensorproc_header);
     fid = fopen(SENSOR_fid,'w'); 
-    for i = 1:(cols - 1)
-      fprintf(fid,'%s,',combined_sensorproc_header(i));  
-    end
-    fprintf(fid,'%s\n',combined_sensorproc_header(cols));
+    fprintf(fid, string_h_sensorproc + '\n');
     fclose(fid);
     % Writes the header for estim file
-    [~, cols] = size(combined_estim_header);
     fid = fopen(ESTIM_fid,'w'); 
-    for i = 1:(cols - 1)
-      fprintf(fid,'%s,',combined_estim_header(i));  
-    end
-    fprintf(fid,'%s\n',combined_estim_header(cols));
+    fprintf(fid, string_h_estim + '\n');
     fclose(fid);
     % Writes the data to the csv files
     dlmwrite(DATA_fid,BDot_Vals,'delimiter',',','precision',9,'-append');
