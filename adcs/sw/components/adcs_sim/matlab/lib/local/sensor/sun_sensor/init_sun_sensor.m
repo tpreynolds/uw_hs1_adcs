@@ -1,11 +1,16 @@
-%% Sim Sun Sensor Model Init File
-%   Husky-Sat1, ADCS Subsystem
-%   T. Reynolds: 5.22.17
-
 function sunsensor = init_sun_sensor( )
+% ----------------------------------------------------------------------- %
+%INIT_SUN_SENSOR    Sim Sun Sensor Model Init File
+%
+% UW HuskySat-1, ADCS System
+%
+% T. Reynolds: 5.22.17
+% ----------------------------------------------------------------------- %
+
 deg2rad     = pi/180;
 
-sunsensor.sample_time_s = (1/100);  % [Hz]
+sunsensor.sample_time_s = (1/20);  % [Hz]
+
 % Variance estimates for each axis
 sunsensor.deg_err       = 0.1;
 sunsensor.varx          = deg2rad * sunsensor.deg_err/(50*sqrt(3));
