@@ -14,7 +14,7 @@
 clear variables; close all; clc;
 set(0,'defaulttextinterpreter','latex');
 
-run_test = 2;
+run_test = 1;
 
 %% Test 1
 
@@ -33,14 +33,6 @@ t_end   = 40000;
 % temp    = randn(4,1);
 % sim_params.dynamics.ic.quat_init    = temp./norm(temp);
 % sim_params.dynamics.ic.quat_init    = [1; 0; 0; 0];
-
-% Choose damping ratio and natural frequency
-J  = fsw_params.bus.inertia;
-z   = 1; % Critically damped
-wn  = pi/2; % Small natural frequency
-
-fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
-fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
 
 % fsw_params.control.pd_controller.p_gain  = wn^2.*J;
 % fsw_params.control.pd_controller.d_gain  = 2*wn*z.*J;
@@ -102,75 +94,85 @@ sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 % fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
 % fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
 
+% Simulation parameters
+[gain_p,gain_d] = meshgrid(0.02:0.007:0.045,0.02:0.05:0.2);
+gains1 = [gain_p(:) gain_d(:)]; 
+[gain_p,gain_d] = meshgrid(6:8:30,6:8:30);
+gains2 = [gain_p(:) gain_d(:)];
+i = 11;
+m = 7;
+
+fsw_params.control.mag_pd_controller.p_gain = diag([gains1(i,1) gains1(i,1) gains1(i,2)]);
+fsw_params.control.mag_pd_controller.d_gain = diag([gains2(m,1) gains2(m,1) gains2(m,2)]);
 % -----
 
-% Simulation parameters
-run_time    = num2str(t_end);
-mdl         = 'mag_pd_control_test';
-load_system(mdl);
-set_param(mdl, 'StopTime', run_time);
-sim(mdl);
-
-% ----- Analyze Results ----- %
-
-quat        = logsout.getElement('<quaternion>').Values.Data;
-omega       = logsout.getElement('<body_rates_radps>').Values.Data;
-cmd_DV      = logsout.getElement('cmd_DV').Values.Data;
-cmd_time    = logsout.getElement('cmd_DV').Values.Time;
-real_dp     = logsout.getElement('dipole').Values.Data;
-real_time   = logsout.getElement('dipole').Values.Time;
-eul         = rad2deg(quat2eul(quat));
-cmd_dp      = [fsw_params.control.cmd_processing.dv_2_m_X fsw_params.control.cmd_processing.dv_2_m_Y fsw_params.control.cmd_processing.dv_2_m_Z].*double(cmd_DV);
-
-q_d         = quat_cmd; %fsw_params.bus.quat_commanded;
-diff        = zeros(1,length(tout));
-angle       = zeros(1,length(tout));
-for i = 1:length(tout)
-    q_diff  = quatmultiply(quatconj(q_d'),quat(i,:));
-    diff(i) = norm( q_diff(2:4) ) ;
-    angle(i) = rad2deg(2*acos(quat(i,1)));
-end
-
-% ----- End Analysis ----- %
-% % Actual State Values
-figure(1)
-subplot(2,1,1)
-plot(tout,quat)
-title('Quaternion','FontSize',15)
-subplot(2,1,2)
-plot(tout,omega)
-title('Angular Velocity [rad/s]','FontSize',15)
-xlabel('Time [s]','FontSize',12)
-
-% Commanded versus Applied Control Signals
-figure(2)
-subplot(2,1,1)
-plot(cmd_time,cmd_dp)
-title('Commanded Dipole [Nm]','FontSize',15)
-subplot(2,1,2)
-plot(real_time,real_dp)
-title('Actual Dipole [Nm]','FontSize',15)
-
-% Attitude Error 
-figure(3), hold on
-plot(tout,diff,'LineWidth',1)
-plot(tout,0.02*ones(1,length(tout)),'k--')
-%plot([ts ts],[0 1],'k--')
-xlabel('Time [s]','FontSize',12)
-title('Error')
-
-% Angle Error
-figure(5)
-plot(tout,angle)
-xlabel('Time [s]','FontSize',12)
-ylabel('THE Euler Angle')
-
-% Euler Angles
-figure(4)
-plot(tout,eul(:,1),tout,eul(:,2),tout,eul(:,3))
-xlabel('Time [s]','FontSize',12)
-legend('Z','Y','X')
-title('Euler Angles')
+% % Simulation parameters
+% run_time    = num2str(t_end);
+% mdl         = 'mag_pd_control_test';
+% load_system(mdl);
+% set_param(mdl, 'StopTime', run_time);
+% sim(mdl);
+% 
+% % ----- Analyze Results ----- %
+% 
+% quat        = logsout.getElement('<quaternion>').Values.Data;
+% omega       = logsout.getElement('<body_rates_radps>').Values.Data;
+% cmd_DV      = logsout.getElement('cmd_DV').Values.Data;
+% cmd_time    = logsout.getElement('cmd_DV').Values.Time;
+% real_dp     = logsout.getElement('dipole').Values.Data;
+% real_time   = logsout.getElement('dipole').Values.Time;
+% eul         = rad2deg(quat2eul(quat));
+% cmd_dp      = [fsw_params.control.cmd_processing.dv_2_m_X fsw_params.control.cmd_processing.dv_2_m_Y fsw_params.control.cmd_processing.dv_2_m_Z].*double(cmd_DV);
+% 
+% q_d         = quat_cmd; %fsw_params.bus.quat_commanded;
+% diff        = zeros(1,length(tout));
+% angle       = zeros(1,length(tout));
+% for i = 1:length(tout)
+%     q_diff  = quatmultiply(quatconj(q_d'),quat(i,:));
+%     diff(i) = norm( q_diff(2:4) ) ;
+%     angle(i) = rad2deg(2*acos(quat(i,1)));
+% end
+% 
+% % ----- End Analysis ----- %
+% % % Actual State Values
+% figure(1)
+% subplot(2,1,1)
+% plot(tout,quat)
+% title('Quaternion','FontSize',15)
+% subplot(2,1,2)
+% plot(tout,omega)
+% title('Angular Velocity [rad/s]','FontSize',15)
+% xlabel('Time [s]','FontSize',12)
+% 
+% % Commanded versus Applied Control Signals
+% figure(2)
+% subplot(2,1,1)
+% plot(cmd_time,cmd_dp)
+% title('Commanded Dipole [Nm]','FontSize',15)
+% subplot(2,1,2)
+% plot(real_time,real_dp)
+% title('Actual Dipole [Nm]','FontSize',15)
+% 
+% % Attitude Error 
+% figure(3), hold on
+% plot(tout,diff,'LineWidth',1)
+% plot(tout,0.02*ones(1,length(tout)),'k--')
+% %plot([ts ts],[0 1],'k--')
+% xlabel('Time [s]','FontSize',12)
+% title('Error')
+% 
+% % Angle Error
+% figure(5)
+% plot(tout,angle)
+% xlabel('Time [s]','FontSize',12)
+% ylabel('THE Euler Angle')
+% 
+% % Euler Angles
+% figure(4)
+% plot(tout,eul(:,1),tout,eul(:,2),tout,eul(:,3))
+% xlabel('Time [s]','FontSize',12)
+% legend('Z','Y','X')
+% title('Euler Angles')
 
 
 %save('workspace-test-NAME.mat')
@@ -182,7 +184,7 @@ elseif run_test == 2
 run('sim_init.m')
 
 % Set sim time
-t_end   = 30000;
+t_end   = 35000;
 
 % Overrides
 quat_cmd    = [1;0;0;0];
@@ -223,133 +225,137 @@ sim_params.dynamics.ic.rate_init = 1e-1*[0.1; 0.1; 0.1];
 % -------------------------------------------------------
 
 % Simulation parameters
-[gain_p,gain_d] = meshgrid(0.001:0.003:0.1,5:2:22);
-gains = [gain_p(:) gain_d(:)]; 
-p = length(gains);
-settle_t = zeros(p,2);
-steady = zeros(p,1);
+[gain_p,gain_d] = meshgrid(0.02:0.007:0.045,0.02:0.05:0.2);
+gains1 = [gain_p(:) gain_d(:)]; 
+[gain_p,gain_d] = meshgrid(6:8:30,6:8:30);
+gains2 = [gain_p(:) gain_d(:)]; 
+p = length(gains1);
+q = length(gains2);
+settle_t = zeros(p*q,2);
+steady = zeros(p*q,6);
 k=1;
 
-for i=249%1:p
-    % Gains
-    fsw_params.control.mag_pd_controller.p_gain = gains(i,1)*eye(3);%diag([1 1 5]);
-    fsw_params.control.mag_pd_controller.d_gain = gains(i,2)*eye(3);%diag([1 1 5/3]);
-    
-%     fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
-%     fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
-
-    run_time    = num2str(t_end);
-    mdl         = 'mag_pd_control_test';
-    load_system(mdl);
-    set_param(mdl, 'StopTime', run_time);
-    sim(mdl);
-    avg_eul     = logsout.getElement('avg_eul_proc').Values.Data;
-    avg_eul_t   = logsout.getElement('avg_eul_proc').Values.Time;
-    Flag        = logsout.getElement('flag').Values.Data;
-    N = length(avg_eul_t);
-    settle_t(i,2) = N;
-    if Flag == 0
-        for j=1:N
-            if isnan(avg_eul(N-j+1)) ~= 1
-                settle_t(i,1) = avg_eul_t(N-j+1);
-                settle_t(i,2) = N-j+1;
-            else
-                break
+for i=8
+    for m=1:16
+        % Gains
+        fsw_params.control.mag_pd_controller.p_gain = diag([gains1(i,1) gains1(i,1) gains1(i,2)]);
+        fsw_params.control.mag_pd_controller.d_gain = diag([gains2(m,1) gains2(m,1) gains2(m,2)]);
+        
+        %     fsw_params.control.mag_pd_controller.p_gain = -diag([-0.03  -0.03  -0.15]);
+        %     fsw_params.control.mag_pd_controller.d_gain = -diag([-21  -21  -35]);
+        
+        run_time    = num2str(t_end);
+        mdl         = 'mag_pd_control_test';
+        load_system(mdl);
+        set_param(mdl, 'StopTime', run_time);
+        sim(mdl);
+        avg_eul     = logsout.getElement('avg_eul_proc').Values.Data;
+        avg_eul_t   = logsout.getElement('avg_eul_proc').Values.Time;
+        Flag        = logsout.getElement('flag').Values.Data;
+        N = length(avg_eul_t);
+        settle_t((i-1)*q+m,2) = N;
+        if Flag == 0
+            for j=1:N
+                if isnan(avg_eul(N-j+1)) ~= 1
+                    settle_t((i-1)*q+m,1) = avg_eul_t(N-j+1);
+                    settle_t((i-1)*q+m,2) = N-j+1;
+                else
+                    break
+                end
+            end
+            if settle_t((i-1)*q+m,2) ~= N
+                steady((i-1)*q+m,1) = rms(avg_eul(settle_t((i-1)*q+m,2):end)); %use the max
+                steady((i-1)*q+m,2) = max(avg_eul(floor((settle_t((i-1)*q+m,2)+N)/2):end));
+                steady((i-1)*q+m,3:6) = [gains1(i,:) gains2(m,:)];
             end
         end
-        if settle_t(i,2) ~= N
-            steady(i) = rms(avg_eul(settle_t(i,2):end));
-        end
+%         if mod((i-1)*q+m,12)==0
+            save('results_st3','settle_t','steady')
+%         end
+        sprintf('[iter i: %d m: %d, ss rms %f, max %f, gains(1-4) %f,%f,%f,%f]', i, m, steady((i-1)*q+m,1),steady((i-1)*q+m,2),steady((i-1)*q+m,3),steady((i-1)*q+m,4),steady((i-1)*q+m,5),steady((i-1)*q+m,6))
     end
-    if mod(i,51)==0
-        fname = sprintf('seg%d.mat', k);
-        save(fname,'settle_t','steady')
-        k=k+1;
-    end
-        
-    i
 end
 
-ST = reshape(settle_t(:,1),size(gain_p)); %settling time
-SS = reshape(steady,size(gain_p)); %steady state rms
-%%
-% ----- Analyze Results ----- %
-quat        = logsout.getElement('<quaternion>').Values.Data;
-omega       = logsout.getElement('<body_rates_radps>').Values.Data;
-cmd_DV      = logsout.getElement('cmd_DV').Values.Data;
-cmd_time    = logsout.getElement('cmd_DV').Values.Time;
-real_dp     = logsout.getElement('dipole').Values.Data;
-real_time   = logsout.getElement('dipole').Values.Time;
-eul         = rad2deg(quat2eul(quat));
-cmd_dp      = [fsw_params.control.cmd_processing.dv_2_m_X fsw_params.control.cmd_processing.dv_2_m_Y fsw_params.control.cmd_processing.dv_2_m_Z].*double(cmd_DV);
-
-q_d         = quat_cmd; %fsw_params.bus.quat_commanded;
-diff        = zeros(1,length(tout));
-angle       = zeros(1,length(tout));
-for i = 1:length(tout)
-    q_diff  = quatmultiply(quatconj(q_d'),quat(i,:));
-    diff(i) = norm( q_diff(2:4) ) ;
-    angle(i) = rad2deg(2*acos(sign(quat(i,1))*quat(i,1)));
-end
-%%
-% ----- End Analysis ----- %
-% Actual State Values
-figure(1)
-subplot(2,1,1)
-plot(tout,quat)
-title('Quaternion','FontSize',15)
-subplot(2,1,2)
-plot(tout,omega)
-title('Angular Velocity [rad/s]','FontSize',15)
-xlabel('Time [s]','FontSize',12)
-
-% Commanded versus Applied Control Signals
-figure(2)
-subplot(2,1,1)
-plot(cmd_time,cmd_dp)
-title('Commanded Dipole [Nm]','FontSize',15)
-subplot(2,1,2)
-plot(real_time,real_dp)
-title('Actual Dipole [Nm]','FontSize',15)
-
-% Attitude Error 
-figure(3), hold on
-plot(tout,diff,'LineWidth',1)
-plot(tout,0.02*ones(1,length(tout)),'k--')
-%plot([ts ts],[0 1],'k--')
-xlabel('Time [s]','FontSize',12)
-title('Error')
-
-% Angle Error
-figure(4)
-plot(tout,angle)
-xlabel('Time [s]','FontSize',12)
-ylabel('THE Euler Angle')
-
-% Euler Angles
-figure(5)
-plot(tout,eul(:,1),tout,eul(:,2),tout,eul(:,3))
-xlabel('Time [s]','FontSize',12)
-legend('Z','Y','X')
-title('Euler Angles')
-%%
-% Settling time
-figure(6)
-surf(gain_p,gain_d,ST,'FaceColor','interp')
-view([142.5,30])
-xlabel('p Gain')
-ylabel('d Gain')
-zlabel('Settling Time')
-grid minor
-
-% Steady State rms
-figure(7)
-surf(gain_p,gain_d,SS,'FaceColor','interp')
-view([142.5,30])
-xlabel('p Gain')
-ylabel('d Gain')
-zlabel('Steady State RMS')
-grid minor
+% ST = reshape(settle_t(:,1),size(gain_p)); %settling time
+% SS = reshape(steady,size(gain_p)); %steady state rms
+% %%
+% % ----- Analyze Results ----- %
+% quat        = logsout.getElement('<quaternion>').Values.Data;
+% omega       = logsout.getElement('<body_rates_radps>').Values.Data;
+% cmd_DV      = logsout.getElement('cmd_DV').Values.Data;
+% cmd_time    = logsout.getElement('cmd_DV').Values.Time;
+% real_dp     = logsout.getElement('dipole').Values.Data;
+% real_time   = logsout.getElement('dipole').Values.Time;
+% eul         = rad2deg(quat2eul(quat));
+% cmd_dp      = [fsw_params.control.cmd_processing.dv_2_m_X fsw_params.control.cmd_processing.dv_2_m_Y fsw_params.control.cmd_processing.dv_2_m_Z].*double(cmd_DV);
+% 
+% q_d         = quat_cmd; %fsw_params.bus.quat_commanded;
+% diff        = zeros(1,length(tout));
+% angle       = zeros(1,length(tout));
+% for i = 1:length(tout)
+%     q_diff  = quatmultiply(quatconj(q_d'),quat(i,:));
+%     diff(i) = norm( q_diff(2:4) ) ;
+%     angle(i) = rad2deg(2*acos(sign(quat(i,1))*quat(i,1)));
+% end
+% %%
+% % ----- End Analysis ----- %
+% % Actual State Values
+% figure(1)
+% subplot(2,1,1)
+% plot(tout,quat)
+% title('Quaternion','FontSize',15)
+% subplot(2,1,2)
+% plot(tout,omega)
+% title('Angular Velocity [rad/s]','FontSize',15)
+% xlabel('Time [s]','FontSize',12)
+% 
+% % Commanded versus Applied Control Signals
+% figure(2)
+% subplot(2,1,1)
+% plot(cmd_time,cmd_dp)
+% title('Commanded Dipole [Nm]','FontSize',15)
+% subplot(2,1,2)
+% plot(real_time,real_dp)
+% title('Actual Dipole [Nm]','FontSize',15)
+% 
+% % Attitude Error 
+% figure(3), hold on
+% plot(tout,diff,'LineWidth',1)
+% plot(tout,0.02*ones(1,length(tout)),'k--')
+% %plot([ts ts],[0 1],'k--')
+% xlabel('Time [s]','FontSize',12)
+% title('Error')
+% 
+% % Angle Error
+% figure(4)
+% plot(tout,angle)
+% xlabel('Time [s]','FontSize',12)
+% ylabel('THE Euler Angle')
+% 
+% % Euler Angles
+% figure(5)
+% plot(tout,eul(:,1),tout,eul(:,2),tout,eul(:,3))
+% xlabel('Time [s]','FontSize',12)
+% legend('Z','Y','X')
+% title('Euler Angles')
+% %%
+% % Settling time
+% figure(6)
+% surf(gain_p,gain_d,ST,'FaceColor','interp')
+% view([142.5,30])
+% xlabel('p Gain')
+% ylabel('d Gain')
+% zlabel('Settling Time')
+% grid minor
+% 
+% % Steady State rms
+% figure(7)
+% surf(gain_p,gain_d,SS,'FaceColor','interp')
+% view([142.5,30])
+% xlabel('p Gain')
+% ylabel('d Gain')
+% zlabel('Steady State RMS')
+% grid minor
 
 %save('workspace-test-NAME.mat')
 end
