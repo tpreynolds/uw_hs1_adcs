@@ -44,6 +44,7 @@ sensor_processing.sunsensor.sensor2body     = [ -1 0 0;
 sensor_processing.sunsensor.body2sensor     = ...
                                 sensor_processing.sunsensor.sensor2body';                                               
 sensor_processing.sunsensor.sample_time_s   = (1/10); % Hz
+sensor_processing.sunsensor.ic.angles       = [60; 60; 0];
 sensor_processing.sunsensor.ang_thresh      = 20; % deg - for hysteresis
 % ---------------------- %              
 
