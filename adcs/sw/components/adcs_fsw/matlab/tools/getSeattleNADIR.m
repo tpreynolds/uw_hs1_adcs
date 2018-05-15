@@ -36,5 +36,9 @@ for i = 1:n
     if norm(R_SEA_eci(i,:)) == 0
         continue
     end
-    r_SEA_eci(i,:) = R_SEA_eci(i,:)/norm(R_SEA_eci(i,:));
+    r_SEA_eci(i,:) = -R_SEA_eci(i,:)/norm(R_SEA_eci(i,:));
 end
+
+j = 1; % Vector to save
+r_SEA = r_SEA_eci(j,:);
+save r_SEA r_SEA
