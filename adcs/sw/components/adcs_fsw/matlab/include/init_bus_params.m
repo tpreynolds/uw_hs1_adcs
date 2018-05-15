@@ -24,6 +24,7 @@ bus.inertia = [ 0.033800072 -0.0000488358 -0.00007392968;
 % Other parameters
 bus.SP_maxP_side        = 7.22; % Watts
 bus.SP_maxP_front       = 6.02; % Watts
+bus.solar_panel_unit    = [ 0; 1; 0 ];
 bus.quat.id             = [ 1; 0; 0; 0 ];
 bus.RW_RPM_thresh.max   = 10e3;
 bus.RW_RPM_thresh.min   = 2e3;
