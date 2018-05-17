@@ -34,9 +34,6 @@ t_end   = 40000;
 % sim_params.dynamics.ic.quat_init    = temp./norm(temp);
 % sim_params.dynamics.ic.quat_init    = [1; 0; 0; 0];
 
-% fsw_params.control.pd_controller.p_gain  = wn^2.*J;
-% fsw_params.control.pd_controller.d_gain  = 2*wn*z.*J;
-
 % syms wn z
 % sol = solve([wn^2.*J;2*wn*z.*J]==[-diag([-0.03  -0.03  -0.15]);-diag([-21  -21  -35])],[wn z]);
 
@@ -104,6 +101,18 @@ m = 7;
 
 fsw_params.control.mag_pd_controller.p_gain = diag([gains1(i,1) gains1(i,1) gains1(i,2)]);
 fsw_params.control.mag_pd_controller.d_gain = diag([gains2(m,1) gains2(m,1) gains2(m,2)]);
+
+% wn = 0.005*2*pi;
+% z = 1;
+% J = fsw_params.bus.inertia;
+
+% fsw_params.control.pd_controller.p_gain  = wn^2.*J;
+% fsw_params.control.pd_controller.d_gain  = 2*wn*z.*J;
+
+Dist_on = 0; % Set to 1 for active disturbances
+
+% Seattle Pointing vector
+% fsw_params.target_gen.r_SEA = [0.1629; 0.6642; -0.7296];
 % -----
 
 % % Simulation parameters

@@ -31,12 +31,14 @@ Origin2SEA  = logsout.getElement('Origin2SEA').Values.Data;
 
 R_SEA_eci = unique(Origin2SEA,'rows');
 [n,~]     = size(R_SEA_eci);
+j = 1;
 
 for i = 1:n
     if norm(R_SEA_eci(i,:)) == 0
         continue
     end
-    r_SEA_eci(i,:) = -R_SEA_eci(i,:)/norm(R_SEA_eci(i,:));
+    r_SEA_eci(j,:) = -R_SEA_eci(i,:)/norm(R_SEA_eci(i,:));
+    j = j+1;
 end
 
 j = 1; % Vector to save
