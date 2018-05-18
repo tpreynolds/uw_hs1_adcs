@@ -26,7 +26,7 @@ sun_point.ic.sun_body_unit  = [0;0;1];
 J   = fsw_params.bus.inertia;
 z   = 1;
 wn  = 0.05 * 2 * pi;
-sun_point.prop_gain = wn^2 * inv(J);
-sun_point.drv_gain  = 2 * wn * z * inv(J);
+sun_point.prop_gain = wn^2 * J;
+sun_point.drv_gain  = 2 * wn * z * J;
 
 end
