@@ -12,7 +12,7 @@ function dynamics = init_dynamics()
 % Quaternion FIRST
 temp                    = randn(4,1);
 dynamics.ic.quat_init   = temp./norm(temp);
-dynamics.ic.quat_init   = [1 0 0 0]'; % override random starting condition
+dynamics.ic.quat_init   = [1.0 0.0 0.0 0.0]'; % override random starting condition
 dynamics.ic.rate_init   = [0 0 0]';
 
 % fsw_params.control.pd_controller.ic.torque = ...
