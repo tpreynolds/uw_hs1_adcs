@@ -55,5 +55,8 @@ title('RSS Tumble Rate [deg/s]')
 
 figure(3), hold on, grid on
 plot(1:numDay,wRSS_day,'ko','MarkerSize',3,'MarkerFaceColor','k')
-xlabel('Time [days]')
-title('RSS Tumble Rate [deg/s]')
+p = polyfit(1:numDay,wRSS_day,1);
+f = polyval(p,1:numDay);
+plot(1:numDay,f,'LineWidth',1)
+xlabel('Time [days]','FontSize',14)
+title('RSS Tumble Rate from Disturbances [deg/s]','FontSize',16)
