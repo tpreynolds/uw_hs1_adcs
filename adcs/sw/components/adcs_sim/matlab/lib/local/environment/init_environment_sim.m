@@ -7,15 +7,14 @@ function sim_params = init_environment_sim(fsw_params,sim_params)
 %   Last Edited: T. Reynolds, 8.10.17
 % ----------------------------------------------------------------------- %
 
-% Add all sub-structs from fsw_params 
-%sim_params.environment  = fsw_params.environment;
-
 % Initialize all sub blocks
 sim_params.environment.sol_p       = init_solar_pressure(fsw_params);
 sim_params.environment.aero_drag   = init_aero_drag();
 sim_params.environment.gravity     = init_gravity_field();
 sim_params.environment.magnetic    = init_magnetic_field();
+
 sim_params.environment.sgp4        = init_sgp4(fsw_params);
+sim_params.environment.PPT         = init_PPT(sim_params);
 
 % Update constant struct
 sim_params.constants.mag.orbit_freq = ...

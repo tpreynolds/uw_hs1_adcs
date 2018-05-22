@@ -37,7 +37,7 @@ CAN.sample_time_s   = 1/5;
 % Signal values
 CAN.override                = 0;
 CAN.LowPowerMode            = 0;
-CAN.pointing                = 1;
+CAN.pointing                = 0;
 CAN.COM2_on                 = 0;
 CAN.sync_pulse_period_s     = 2;
 CAN.PPT_on_sync_pct         = 60;
