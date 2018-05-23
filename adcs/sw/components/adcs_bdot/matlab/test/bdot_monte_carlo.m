@@ -10,7 +10,7 @@
 % Assumes sim_init.m has been run to set paths
 %
 % Toggle to save figures and data. 0 => no save, 1 => save.
-save_all = 0;
+save_all = 0; close all;
 
 set(0,'defaulttextinterpreter','latex');
 figdir  = './test/figs/';
@@ -29,8 +29,9 @@ mu  = 398600.4418; %Standard gravitational parameter for the earth km3s-2
 trials = 100;
 tic
 incidence = zeros(trials,3);
+power_log = [];
 for i = 1:trials
-
+    fclose all;
     %OUR VALUES WITH RANDOM NOISE
     day_dec = 334;
     %Given data including 3 sigma
@@ -94,12 +95,17 @@ for i = 1:trials
 
     tumble          = logsout.getElement('tumble').Values.Data;
     tumble_time     = logsout.getElement('tumble').Values.Time;
-
-    main_face_inc = sc_in_sun(end)*sc2sun_body(end,:)*[0 1 0]';
-    side_1_inc = sc_in_sun(end)*sc2sun_body(end,:)*[1 0 0]';
-    side_2_inc = sc_in_sun(end)*sc2sun_body(end,:)*[-1 0 0]';
-
-    incidence(i,:) = [main_face_inc*(main_face_inc>0),side_1_inc*(side_1_inc>0),side_2_inc*(side_2_inc>0)];
+    
+    SP_power_W = logsout.getElement('SP_power_W').Values.Data;
+    SP_power_W_time = logsout.getElement('SP_power_W').Values.Time;
+    
+    power_log = [power_log;SP_power_W(end,:)];
+    
+%     main_face_inc = sc_in_sun(end)*sc2sun_body(end,:)*[0 1 0]';
+%     side_1_inc = sc_in_sun(end)*sc2sun_body(end,:)*[1 0 0]';
+%     side_2_inc = sc_in_sun(end)*sc2sun_body(end,:)*[-1 0 0]';
+% 
+%     incidence(i,:) = [main_face_inc*(main_face_inc>0),side_1_inc*(side_1_inc>0),side_2_inc*(side_2_inc>0)];
 
 end
 toc
