@@ -22,6 +22,6 @@ sim_params.constants.mag.orbit_freq = ...
                                 fsw_params.constants.convert.rev2rad * ...
                                 fsw_params.constants.time.sec2day;
 
-
+sim_params.environment.DT_dipole    = [ 2.8868e-04; 2.8868e-04; 2.8868e-04];
 
 end

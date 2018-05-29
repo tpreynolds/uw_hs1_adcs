@@ -24,7 +24,8 @@ fsw_params.bdot         = init_bdot_controller(fsw_params);
 % Test overrides
 sim_params.CAN.COM2_on      = 1;
 sim_params.CAN.pointing     = 0;
-sim_params.CAN.ic.PPT_on    = 1;
+sim_params.CAN.ic.PPT_on    = 0;
+sim_params.CAN.override     = 4;
 
 % Load sim and set params
 run_time    = 86400;
