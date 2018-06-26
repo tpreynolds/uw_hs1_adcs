@@ -36,7 +36,7 @@ B_star      = B_star*10^(B_star_ex);
 % %All values that aren't specified are fixed to SWISSCUBE values
 % fileID = fopen('TLE_Dump/hs1TLE.tle','w');
 % fprintf(fileID,'1 35932U 09051B   %2f%11f  .00000145  00000-0  32923-4 0 00003\n',y,day_dec);
-% fprintf(fileID,'2 35932 %f %f %f %f %f %f478955',INC,RAAN,ECC,AOP,MNA,MNM);
+% fprintf(fileID,'2 35932 %7f %7f %7f %7f %7f %f478955',INC,RAAN,ECC,AOP,MNA,MNM);
 % fclose(fileID);
 
 TLE = [y, jd_epoch_days, B_star, INC, RAAN, ECC, AOP, MNA, MNM]';

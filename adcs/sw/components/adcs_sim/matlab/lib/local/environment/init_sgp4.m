@@ -1,18 +1,20 @@
-%% SGP4 Init File
+function sgp4   = init_sgp4(fsw_params)
 % ----------------------------------------------------------------------- %
-%   UW HusySat-1, ADCS Team
+%INIT_SGP4  Initialize SGP4 Orbit Propagator
 %
 %   Init file for sgp4 library.
 %
+%   UW HuskySat-1, ADCS Team.
+%
 %   T. Reynolds -- 2.10.18
 % ----------------------------------------------------------------------- %
-function sgp4   = init_sgp4(fsw_params)
 
     DEG2RAD         = fsw_params.constants.convert.deg2rad;
     REVpD2RADpM     = fsw_params.constants.convert.revpday_2_radpmin;
     
-     sgp4.tle_filename = 'SWISSCUBE.tle';
+%     sgp4.tle_filename = 'SWISSCUBE.tle';
 %     sgp4.tle_filename = 'QUAKESAT.tle';
+    sgp4.tle_filename = 'hs1TLE.tle';
 
     [sgp4.orbit_tle,sgp4.JD_epoch_days] = get_tle(sgp4.tle_filename);
 
@@ -27,11 +29,11 @@ function sgp4   = init_sgp4(fsw_params)
     sgp4.MNM     = sgp4.orbit_tle(9)*REVpD2RADpM;   % [rad/min]
     
     % Estimated from epoch_jd using online converters
-    % DON'T CHANGE THE TLE W/O CHANGING THE GPS START TIME
+    % DO NOT CHANGE THE TLE W/O CHANGING THE GPS START TIME
     % SWISSCUBE and QUAKESAT have the same epoch
     % sec_init from GPS time + account for leap seconds
-    sgp4.gps_sec_init   = 154800 + 37.0 - 19.0;
-    sgp4.gps_week_init  = 2021; 
+    sgp4.gps_sec_init   = 518400 + 37.0 - 19.0;
+    sgp4.gps_week_init  = 2029; 
     sgp4.ic.gps_time    = [sgp4.gps_sec_init; sgp4.gps_week_init];
 
 end
