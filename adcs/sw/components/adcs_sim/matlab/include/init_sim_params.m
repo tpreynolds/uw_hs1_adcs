@@ -13,6 +13,10 @@ function [sim_params,fsw_params] = init_sim_params(fsw_params)
 
 % ----- Spacecraft Parameters ----- %
 sim_params.bus  = fsw_params.bus;
+sim_params.bus.decimation.long          = 60;
+sim_params.bus.decimation.short         = 6;
+sim_params.bus.decimation.num_pts_long  = 60000;
+sim_params.bus.decimation.num_pts_short = 6000;
 [sim_params.MET, fsw_params]  = init_MET(fsw_params);
 % --------------------------------- %
 
