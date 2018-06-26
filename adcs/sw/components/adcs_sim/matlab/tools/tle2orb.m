@@ -7,7 +7,7 @@ RAAN    = orbit_tle(5);      % Right Ascension of the Ascending Node [deg]
 ECC     = orbit_tle(6);      % Eccentricity 
 AOP     = orbit_tle(7);      % Argument of periapsis [deg]
 MNA     = orbit_tle(8);      % Mean anomaly [deg]
-MNM     = orbit_tle(9);     % Mean motion [Revs per day]
+MNM     = orbit_tle(9);      % Mean motion [Revs per day]
 
 % Orbital elements
 

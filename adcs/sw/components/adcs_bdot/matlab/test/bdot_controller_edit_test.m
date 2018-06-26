@@ -1,11 +1,11 @@
-clear variables; close all; clc;
+% clear variables; close all; clc;
 set(0,'defaulttextinterpreter','latex');
-cd ~; cd uw_cubesat_adcs/adcs/sw/components/adcs_sim/matlab/
-addpath(genpath(pwd))
-cd ~; cd uw_cubesat_adcs/adcs/sw/components/adcs_fsw/matlab/
-addpath(genpath(pwd))
-cd ~; cd uw_cubesat_adcs/adcs/sw/components/adcs_bdot/matlab/
-addpath(genpath(pwd))
+% cd uw_hs1_adcs/adcs/sw/components/adcs_sim/matlab/
+% addpath(genpath(pwd))
+% cd uw_hs1_adcs/adcs/sw/components/adcs_fsw/matlab/
+% addpath(genpath(pwd))
+% cd uw_hs1_adcs/adcs/sw/components/adcs_bdot/matlab/
+% addpath(genpath(pwd))
 
 
 figdir = './test/figs/';
