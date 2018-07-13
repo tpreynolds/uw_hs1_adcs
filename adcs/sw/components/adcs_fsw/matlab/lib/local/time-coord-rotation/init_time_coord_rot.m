@@ -26,17 +26,23 @@ fsw_params.constants.ic.vel_teme_mps = ...
                                 KM2M*fsw_params.constants.ic.vel_teme_kmps;
 
 % Get time values
-[~,~,~,~,T_ut1_J2000,T_TT_J2000] = ...
+[time_ut1,~,~,~,T_ut1_J2000,T_TT_J2000] = ...
                     time_conversion(fsw_params.constants.ic.time.gps,dut1);
 % save for epoch initialization
-fsw_params.constants.ic.time.JD_J2000_TT     = T_TT_J2000 * cent2JD; 
-fsw_params.constants.ic.time.JD_J2000_TT_s   = ...
+fsw_params.constants.ic.time.time_ut1       = time_ut1;
+fsw_params.constants.ic.time.T_ut1_J2000    = T_ut1_J2000;
+fsw_params.constants.ic.time.JD_J2000_TT    = T_TT_J2000 * cent2JD; 
+fsw_params.constants.ic.time.JD_J2000_TT_s  = ...
                         fsw_params.constants.ic.time.JD_J2000_TT * day2sec;
 
 % get rotation matrices
 [ecef_2_eci, ppef_2_veci, ~, teme_2_eci]  = ...
                             coordinate_rotations(T_ut1_J2000, T_TT_J2000);
 eci_2_ecef          = ecef_2_eci';  
+
+% save for initialization
+fsw_params.constants.ic.DCM.ecef_2_eci  = ecef_2_eci;
+fsw_params.constants.ic.DCM.teme_2_eci  = teme_2_eci;
 
 % Transform the TEME pos/vel to the ECI & ECEF frames
 fsw_params.constants.ic.pos_eci_m    = ...
